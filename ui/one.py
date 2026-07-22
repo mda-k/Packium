@@ -9,24 +9,35 @@ rootdir = currentdir.parent
 print(rootdir)		#root
 resourcesdir = rootdir  / "resources"
 print(resourcesdir)
+functionsdir = rootdir / "functions"
+print(functionsdir)
 if str(rootdir) not in sys.path:
     sys.path.insert(0, str(rootdir))
 if str(currentdir) not in sys.path:
     sys.path.insert(0, str(currentdir))
 if str(resourcesdir) not in sys.path:
     sys.path.insert(0, str(resourcesdir))
+if str(functionsdir) not in sys.path:
+    sys.path.insert(0, str(functionsdir))
+from update import *
+def updatebutton_pressed():
+    print("update button pressed.")
+    names = winget_update()
+    if names:
+        print("one.py got the names from update.py!")
+        print("got:")
+        for name in names:
+            print(name)
 def mainui():
     app = ctk.CTk()
     app.geometry("300x200")
     app.overrideredirect(True)
     ctk.set_appearance_mode("Dark")
     ctk.set_default_color_theme("dark-blue")
-
     def FUCKMYLIFE():
-        app.quit()
-        app.after(100, app.destroy())
+        app.destroy()
     app.protocol("WM_DELETE_WINDOW", FUCKMYLIFE)
-    app.title("Winget UI")
+    app.title("Packium")
     app.attributes("-topmost", True)
     transparent_color = "#000001"
     app.attributes("-alpha", 0.7)
@@ -43,17 +54,26 @@ def mainui():
     updateicon_path = resourcesdir / "update.png"
     print(updateicon_path)
     updateiconimg = Image.open(updateicon_path)
-    updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(30, 30))
-    updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(40, 40))
+    updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878", command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
-    dummybutton = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
-    dummybutton.grid(row=0, column=1, padx=10, pady=10)
-    dummybutton0 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
-    dummybutton0.grid(row=0, column=2, padx=10, pady=10)
+    downloadicon_path = resourcesdir / "download.png"
+    downloadiconimg = Image.open(downloadicon_path)
+    downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(40, 40))
+    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    downloadbutton.grid(row=0, column=1, padx=10, pady=10)
+    uninstallicon_path = resourcesdir / "uninstall.png"
+    uninstalliconimg = Image.open(uninstallicon_path)
+    uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(40, 40))
+    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
     dummybutton1 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
     dummybutton1.grid(row=1, column=0, padx=10, pady=10)
     dummybutton2 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
     dummybutton2.grid(row=1, column=1, padx=10, pady=10)
-    dummybutton3 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
-    dummybutton3.grid(row=1, column=2, padx=10, pady=10)
+    abouticon_path = resourcesdir / "about.png"
+    abouticonimg = Image.open(abouticon_path)
+    abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(40, 40))
+    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    aboutbutton.grid(row=1, column=2, padx=10, pady=10)
     app.mainloop()
