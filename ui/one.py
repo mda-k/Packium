@@ -29,15 +29,6 @@ if str(functionsdir) not in sys.path:
 #functions
 from update import *
 
-def updatebutton_pressed():
-    print("update button pressed.")
-    names = winget_update()
-    if names:
-        print("one.py got the names from update.py!")
-        print("got:")
-        for name in names:
-            print(name)
-            
 
 def mainui():
     app = ctk.CTk() #basic ctk
@@ -80,6 +71,39 @@ def mainui():
     name.pack(side="top", pady=(2, 0))
     optionsframe = ctk.CTkFrame(overlayframe, corner_radius=25, fg_color="transparent")
     optionsframe.pack()
+    
+    
+    #button functions
+    
+    def updatebutton_pressed():
+        print("update button pressed.")
+        names = winget_update()
+        if names:
+            print("one.py got the names from update.py!")
+            print("got:")
+            update_popup = ctk.CTkToplevel(app)
+            update_popup.overrideredirect(True)
+            update_popup.title("List of available updates.")
+            update_popup.geometry("550x500")
+            update_popup.attributes("-topmost", True)
+            transparent_color = "#000001"
+            update_popup.attributes("-alpha", 0.7)
+            update_popup.attributes("-transparentcolor", transparent_color)
+            update_popup.configure(fg_color=transparent_color)
+            def exitup():
+                update_popup.destroy()
+            overlayframeup = ctk.CTkFrame(update_popup, corner_radius=25)
+            overlayframeup.pack()
+            closeup = ctk.CTkButton(overlayframeup, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitup())
+            closeup.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
+            avail = ctk.CTkLabel(overlayframeup, text="Available updates", font=("Arial", 16, "bold"), text_color="white")
+            avail.pack(pady=2)
+            list_frame = ctk.CTkScrollableFrame(overlayframeup, fg_color="transparent", corner_radius=25)
+            list_frame.pack(padx=7, pady=0, fill="both", expand=True)
+            for name in names:
+                lbl = ctk.CTkLabel(list_frame, text=name, anchor="w", font=("Arial", 12, "bold"))
+                lbl.pack(padx=10, pady=5, fill="x")
+            
     
     #buttons
     updateicon_path = resourcesdir / "update.png"
