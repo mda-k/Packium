@@ -1,8 +1,13 @@
+#imports
 import customtkinter as ctk
 import tkinter as tk
 from PIL import Image
 from pathlib import Path
+from tkinter import messagebox
 import sys
+
+
+#directories
 currentdir = Path(__file__).resolve().parent
 print(currentdir)	#ui
 rootdir = currentdir.parent
@@ -19,7 +24,11 @@ if str(resourcesdir) not in sys.path:
     sys.path.insert(0, str(resourcesdir))
 if str(functionsdir) not in sys.path:
     sys.path.insert(0, str(functionsdir))
+    
+    
+#functions
 from update import *
+
 def updatebutton_pressed():
     print("update button pressed.")
     names = winget_update()
@@ -28,13 +37,15 @@ def updatebutton_pressed():
         print("got:")
         for name in names:
             print(name)
+            
+
 def mainui():
-    app = ctk.CTk()
+    app = ctk.CTk() #basic ctk
     app.geometry("300x200")
     app.overrideredirect(True)
     ctk.set_appearance_mode("Dark")
     ctk.set_default_color_theme("dark-blue")
-    def FUCKMYLIFE():
+    def FUCKMYLIFE(): #exit
         app.destroy()
     app.protocol("WM_DELETE_WINDOW", FUCKMYLIFE)
     app.title("Packium")
@@ -43,6 +54,24 @@ def mainui():
     app.attributes("-alpha", 0.7)
     app.attributes("-transparentcolor", transparent_color)
     app.configure(fg_color=transparent_color)
+    
+    
+    #appearance variables
+    buttoncolor = "#3b3b3b"
+    buttoncolor_hover = "#787878"
+    replacementicon_color = "#3b3b3b"
+    replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color)
+    
+    
+    #icon
+    appicon = resourcesdir / "icon.ico"
+    try:
+        app.iconbitmap(appicon)
+    except Exception:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
+        appicon = Image.new("RGB", (32, 32), color=replacementicon_color)
+        
+    #rounded corner frame
     overlayframe = ctk.CTkFrame(app, corner_radius=25)
     overlayframe.pack(fill="both", expand=True, padx=2, pady=2)
     close = ctk.CTkButton(overlayframe, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:FUCKMYLIFE())
@@ -51,29 +80,47 @@ def mainui():
     name.pack(side="top", pady=(2, 0))
     optionsframe = ctk.CTkFrame(overlayframe, corner_radius=25, fg_color="transparent")
     optionsframe.pack()
+    
+    #buttons
     updateicon_path = resourcesdir / "update.png"
     print(updateicon_path)
-    updateiconimg = Image.open(updateicon_path)
+    try:
+        updateiconimg = Image.open(updateicon_path)
+    except FileNotFoundError:
+        updateiconimg = replacementicon512
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/update.png.")
     updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(40, 40))
-    updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878", command=lambda:updatebutton_pressed())
+    updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
     downloadicon_path = resourcesdir / "download.png"
-    downloadiconimg = Image.open(downloadicon_path)
+    try:
+        downloadiconimg = Image.open(downloadicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/download.png.")
+        downloadiconimg = replacementicon512
     downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(40, 40))
-    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     downloadbutton.grid(row=0, column=1, padx=10, pady=10)
     uninstallicon_path = resourcesdir / "uninstall.png"
-    uninstalliconimg = Image.open(uninstallicon_path)
+    try:
+        uninstalliconimg = Image.open(uninstallicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/uninstall.png.")
+        uninstalliconimg = replacementicon512
     uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(40, 40))
-    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
-    dummybutton1 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    dummybutton1 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     dummybutton1.grid(row=1, column=0, padx=10, pady=10)
-    dummybutton2 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    dummybutton2 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     dummybutton2.grid(row=1, column=1, padx=10, pady=10)
     abouticon_path = resourcesdir / "about.png"
-    abouticonimg = Image.open(abouticon_path)
+    try:
+        abouticonimg = Image.open(abouticon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/about.png")
+        abouticonimg = replacementicon512
     abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(40, 40))
-    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color="#3b3b3b", hover_color="#787878")
+    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     aboutbutton.grid(row=1, column=2, padx=10, pady=10)
     app.mainloop()
