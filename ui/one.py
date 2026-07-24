@@ -83,27 +83,73 @@ def mainui():
             print("got:")
             update_popup = ctk.CTkToplevel(app)
             update_popup.overrideredirect(True)
-            update_popup.title("List of available updates.")
-            update_popup.geometry("550x500")
+            update_popup.title("Updates")
+            update_popup.geometry("400x400")
             update_popup.attributes("-topmost", True)
             transparent_color = "#000001"
             update_popup.attributes("-alpha", 0.7)
             update_popup.attributes("-transparentcolor", transparent_color)
             update_popup.configure(fg_color=transparent_color)
+            appicon = resourcesdir / "icon.ico"
+            try:
+                update_popup.after(200, lambda: update_popup.iconbitmap(appicon))
+            except Exception:
+                messagebox.showerror("Error", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
+                appicon = Image.new("RGB", (32, 32), color=replacementicon_color)
+            def startmove(event):
+                update_popup.x = event.x
+                update_popup.y = event.y
+            def move(event):
+                deltax = event.x - update_popup.x
+                deltay = event.y - update_popup.y
+                x = update_popup.winfo_x() + deltax
+                y = update_popup.winfo_y() + deltay
+                update_popup.geometry(f"+{x}+{y}")
             def exitup():
                 update_popup.destroy()
             overlayframeup = ctk.CTkFrame(update_popup, corner_radius=25)
-            overlayframeup.pack()
+            overlayframeup.pack(fill="both", expand=True)
+            overlayframeup.bind("<Button-1>", startmove)
+            overlayframeup.bind("<B1-Motion>", move)
             closeup = ctk.CTkButton(overlayframeup, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitup())
             closeup.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
             avail = ctk.CTkLabel(overlayframeup, text="Available updates", font=("Arial", 16, "bold"), text_color="white")
             avail.pack(pady=2)
+            avail.bind("<Button-1>", startmove)
+            avail.bind("<B1-Motion>", move)
             list_frame = ctk.CTkScrollableFrame(overlayframeup, fg_color="transparent", corner_radius=25)
-            list_frame.pack(padx=7, pady=0, fill="both", expand=True)
+            list_frame.pack(padx=8, pady=0, fill="both", expand=True)
+            list_frame.bind("<Button-1>", startmove)
+            list_frame.bind("<B1-Motion>", move)
+            checkboxes = {}
             for name in names:
-                lbl = ctk.CTkLabel(list_frame, text=name, anchor="w", font=("Arial", 12, "bold"))
-                lbl.pack(padx=10, pady=5, fill="x")
+                item = ctk.CTkCheckBox(list_frame, text=name, font=("Arial", 12, "bold"), checkbox_width=20, checkbox_height=20, corner_radius=6)
+                item.pack(padx=10, pady=5, fill="x", anchor="w")
+                checkboxes[name] = item
+            def getchecked():
+                selected = [name for name, item in checkboxes.items() if item.get() ==1]
+                if not selected:
+                    messagebox.showerror("Error!", "You don't have any items chosen. Either close the window, or choose an item or more to continue.")
+                for selecteditem in selected:
+                    print(f"Selected update: {selecteditem}")
+            continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
+            continuebuttonup.pack()
             
+    def startmove(event):
+        app.x = event.x
+        app.y = event.y
+    def move(event):
+        deltax = event.x - app.x
+        deltay = event.y - app.y
+        x = app.winfo_x() + deltax
+        y = app.winfo_y() + deltay
+        app.geometry(f"+{x}+{y}")
+    overlayframe.bind("<Button-1>", startmove)
+    overlayframe.bind("<B1-Motion>", move)
+    name.bind("<Button-1>", startmove)
+    name.bind("<B1-Motion>", move)
+    optionsframe.bind("<Button-1>", startmove)
+    optionsframe.bind("<B1-Motion>", move)
     
     #buttons
     updateicon_path = resourcesdir / "update.png"
