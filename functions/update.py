@@ -24,10 +24,17 @@ def winget_update():
                 if not line.strip() or "upgrades available" in line: #stop after the app list
                     break
                 if len(line) >= namestart:
-                    app_name = line [namestart:idstart].strip() #grab the app name from the namestart character to the idstart character, and strip away the spaces at the end
+                    app_name = line[namestart:idstart].strip() #grab the app name from the namestart character to the idstart character, and strip away the spaces at the end
                     print(f"found the following app name: {app_name}")
                     if app_name:
-                        names.append(app_name) #add the app name to the list
+                        names.append(app_name) #add the app name to the
+                    app_id = line[idstart:versionstart].strip()
+                    print(f"found the following app id: {app_id}")
+                    if app_id:
+                          ids.append(app_id)
+                        
     print(f"collected all the names: {names}")
-    return(names)
-                
+    print(f"collected all ids: {ids}")
+    name_id_dict = dict(zip(names, ids))
+    print(name_id_dict)
+    return(name_id_dict)

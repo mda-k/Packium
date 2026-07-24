@@ -5,6 +5,7 @@ from PIL import Image
 from pathlib import Path
 from tkinter import messagebox
 import sys
+import time
 
 
 #directories
@@ -77,10 +78,14 @@ def mainui():
     
     def updatebutton_pressed():
         print("update button pressed.")
-        names = winget_update()
-        if names:
+        name_id_dict = winget_update()
+        names = list(name_id_dict.keys())
+        ids = list(name_id_dict.values())
+        if names and ids:
             print("one.py got the names from update.py!")
-            print("got:")
+            print(f"got: {names}")
+            print("one got the ids from update.py!")
+            print(f"got: {ids}")
             update_popup = ctk.CTkToplevel(app)
             update_popup.overrideredirect(True)
             update_popup.title("Updates")
@@ -127,13 +132,27 @@ def mainui():
                 item.pack(padx=10, pady=5, fill="x", anchor="w")
                 checkboxes[name] = item
             def getchecked():
+                selectedids = []
                 selected = [name for name, item in checkboxes.items() if item.get() ==1]
                 if not selected:
                     messagebox.showerror("Error!", "You don't have any items chosen. Either close the window, or choose an item or more to continue.")
                 for selecteditem in selected:
                     print(f"Selected update: {selecteditem}")
+                    
+                    selectedids.append(name_id_dict[(selecteditem)])
+                    print(f"added id to the list. the list: {selectedids}")
+                    messagebox.showinfo("Notice", "You have pressed the continue button. Packium will in-fact freeze for as long as the updates last, since the script is waiting for the subprocess to be done. Please do not kill or interfere with Packium.")
+                if selectedids:
+                    continuebuttonup.configure(state="disabled", text="Working...")
+                    cmd = ["winget", "upgrade", *selectedids]
+                    updateoutput = subprocess.run(cmd, capture_output=True, text=True)
+                    time.sleep(1)
+                    updateoutputclean = updateoutput.stdout
+                    print(f"the update is done: {updateoutputclean}")
+                    messagebox.showinfo("Task done!", "All the selected programs have been updated!")
+                    update_popup.destroy()
             continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
-            continuebuttonup.pack()
+            continuebuttonup.pack(pady=10)
             
     def startmove(event):
         app.x = event.x
