@@ -102,6 +102,8 @@ def mainui():
                 update_popup.attributes("-alpha", 0.7)
                 update_popup.attributes("-transparentcolor", transparent_color)
                 update_popup.configure(fg_color=transparent_color)
+                update_popup.grab_set()
+                update_popup.focus_set()
                 appicon = resourcesdir / "icon.ico"
                 try:
                     update_popup.after(200, lambda: update_popup.iconbitmap(appicon))
@@ -120,7 +122,6 @@ def mainui():
                 def exitup():
                     updatebutton.configure(state="normal")
                     update_popup.destroy()
-                    update_popup.quit()
                 overlayframeup = ctk.CTkFrame(update_popup, corner_radius=25)
                 overlayframeup.pack(fill="both", expand=True)
                 overlayframeup.bind("<Button-1>", startmove)
@@ -150,22 +151,21 @@ def mainui():
                     
                         selectedids.append(name_id_dict[(selecteditem)])
                         print(f"added id to the list. the list: {selectedids}")
-                        messagebox.showinfo("Notice", "You have pressed the continue button. Packium will in-fact freeze for as long as the updates last, since the script is waiting for the subprocess to be done. Please do not kill or interfere with Packium.")
+                        messagebox.showinfo("Notice", "You have pressed the continue button. Packium may or may not freeze for as long as the updates last, since the script is waiting for the subprocess to be done. Please do not kill or interfere with Packium.")
                         messagebox.showinfo("Notice", "A command prompt window will open, so you can see where the update process is standing.")
                     if selectedids:
                         continuebuttonup.configure(state="disabled", text="Working...")
-                        def afterrunupdatethread(updateoutputclean):
+                        def afterrunupdatethread():
                             
-                            print(f"the update is done: {updateoutputclean}")
+                            print(f"the update is done.")
                             messagebox.showinfo("Task done!", "All the selected programs have been updated!")
                             updatebutton.configure(state="normal")
                             update_popup.destroy()
                         def runupdatethread():
                             cmd = ["winget", "upgrade", *selectedids]
-                            updateoutput = subprocess.run(cmd, capture_output=True, text=True, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                            subprocess.run(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE)
                             time.sleep(1)
-                            updateoutputclean = updateoutput.stdout
-                            app.after(0, lambda: afterrunupdatethread(updateoutputclean))
+                            app.after(0, lambda: afterrunupdatethread())
                         threading.Thread(target=runupdatethread, daemon=True).start()
                         
                 continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
