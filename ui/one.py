@@ -198,6 +198,16 @@ def mainui():
     updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(40, 40))
     updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
+    sizeidxub = 40
+    sizeidxubh = 46
+    def hoverupdate():
+        for sizeidx in range(sizeidxub, sizeidxubh + 1) :
+            time.sleep(0.1)
+            updateicon.configure(size=(sizeidx, sizeidx))
+    def hoverupdateleave():
+        updateicon.configure(size=(40, 40))
+    updatebutton.bind("<Enter>", hoverupdate)
+    updatebutton.bind("<Leave>", hoverupdateleave)
     downloadicon_path = resourcesdir / "download.png"
     try:
         downloadiconimg = Image.open(downloadicon_path)
