@@ -80,6 +80,7 @@ def mainui():
     def updatebutton_pressed():
         print("update button pressed.")
         updatebutton.configure(state="disabled")
+        messagebox.showinfo("Notice", "Winget may or may not reinstall the program to it's original path. I haven't been able to figure out how it's possible to force Winget to keep the updated program at it's original path, especially if some vendors just do not accept Winget's --location parameter. Before using the program's update feature, you should know, that some programs might be moved to the C: drive, the vendor's hardcoded/default installation path.")
         def fetchupdates():
             name_id_dict = winget_update()
             app.after(0, lambda: onfetchedupdates(name_id_dict))
@@ -199,12 +200,17 @@ def mainui():
     updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
     sizeidxub = 40
-    sizeidxubh = 46
-    def hoverupdate():
-        for sizeidx in range(sizeidxub, sizeidxubh + 1) :
-            time.sleep(0.1)
-            updateicon.configure(size=(sizeidx, sizeidx))
-    def hoverupdateleave():
+    sizeidxubh = 44
+    def hoveran(current_size):
+        if current_size <= sizeidxubh:
+            try:
+                updateicon.configure(size=(current_size, current_size))
+                updatebutton.after(30, hoveran, current_size + 1)
+            except Exception:
+                pass
+    def hoverupdate(event=None ):
+        hoveran(sizeidxub)
+    def hoverupdateleave(event=None):
         updateicon.configure(size=(40, 40))
     updatebutton.bind("<Enter>", hoverupdate)
     updatebutton.bind("<Leave>", hoverupdateleave)
