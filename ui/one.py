@@ -40,6 +40,7 @@ def mainui():
     ctk.set_default_color_theme("dark-blue")
     def FUCKMYLIFE(): #exit
         app.destroy()
+        app.quit()
     app.protocol("WM_DELETE_WINDOW", FUCKMYLIFE)
     app.title("Packium")
     app.attributes("-topmost", True)
@@ -199,19 +200,37 @@ def mainui():
     updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(40, 40))
     updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
+    timerid = None
     sizeidxub = 40
+    currentsize = sizeidxub
     sizeidxubh = 44
-    def hoveran(current_size):
-        if current_size <= sizeidxubh:
-            try:
-                updateicon.configure(size=(current_size, current_size))
-                updatebutton.after(30, hoveran, current_size + 1)
-            except Exception:
-                pass
+    def hoveran(tidxub):
+        nonlocal timerid, sizeidxub, sizeidxubh, currentsize
+        if currentsize == tidxub:
+            timerid = None
+            return
+        if currentsize < tidxub:
+            currentsize += 1
+        else:
+            currentsize -= 1
+        try:
+            updateicon.configure(size=(currentsize, currentsize))
+        except Exception:
+            pass
+        timerid = updatebutton.after(20, hoveran, tidxub)
     def hoverupdate(event=None ):
-        hoveran(sizeidxub)
+        nonlocal timerid
+        if timerid is not None:
+            updatebutton.after_cancel(timerid)
+            timerid = None
+        hoveran(sizeidxubh)
     def hoverupdateleave(event=None):
-        updateicon.configure(size=(40, 40))
+        nonlocal timerid
+        if timerid is not None:
+            updatebutton.after_cancel(timerid)
+            timerid = None
+        hoveran(sizeidxub)
+        updateicon.configure(size=(sizeidxub, sizeidxub))
     updatebutton.bind("<Enter>", hoverupdate)
     updatebutton.bind("<Leave>", hoverupdateleave)
     downloadicon_path = resourcesdir / "download.png"
