@@ -369,6 +369,40 @@ def mainui():
     uninstallbutton.bind("<Leave>", hoverupdateleaveui)
     
     
+    timeridseb = None
+    sizeidxsb = 40
+    currentsize = sizeidxsb
+    sizeidxsbh = 44
+    def hoverans(tidxsb):
+        nonlocal timeridseb, sizeidxsb, sizeidxsbh, currentsize
+        if currentsize == tidxsb:
+            timeridseb = None
+            return
+        if currentsize < tidxsb:
+            currentsize += 1
+        else:
+            currentsize -= 1
+        try:
+            settingsicon.configure(size=(currentsize, currentsize))
+        except Exception:
+            pass
+        timeridseb = settingsbutton.after(20, hoverans, tidxsb)
+    def hoverupdates(event=None ):
+        nonlocal timeridseb
+        if timeridseb is not None:
+            settingsbutton.after_cancel(timeridseb)
+            timeridseb = None
+        hoverans(sizeidxsbh)
+    def hoverupdateleaves(event=None):
+        nonlocal timeridseb
+        if timeridseb is not None:
+            settingsbutton.after_cancel(timeridseb)
+            timeridseb = None
+        hoverans(sizeidxsb)
+        settingsicon.configure(size=(sizeidxsb, sizeidxsb))
+    settingsbutton.bind("<Enter>", hoverupdates)
+    settingsbutton.bind("<Leave>", hoverupdateleaves)
+    
     timeriddib = None
     sizeidxdib = 40
     currentsize = sizeidxdib
