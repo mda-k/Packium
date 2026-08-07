@@ -201,6 +201,71 @@ def mainui():
     updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(40, 40))
     updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
+
+    downloadicon_path = resourcesdir / "download.png"
+    try:
+        downloadiconimg = Image.open(downloadicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/download.png.")
+        downloadiconimg = replacementicon512
+    downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(40, 40))
+    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    downloadbutton.grid(row=0, column=1, padx=10, pady=10)
+        
+        
+    uninstallicon_path = resourcesdir / "uninstall.png"
+    try:
+        uninstalliconimg = Image.open(uninstallicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/uninstall.png.")
+        uninstalliconimg = replacementicon512
+    uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(40, 40))
+    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
+    
+    
+    
+        
+        
+        
+    def discordbuttonclicked():
+        discordinvite()
+        print("discord invite")
+    discordicon_path = resourcesdir / "discord.png"
+    try:
+        discordiconimg = Image.open(discordicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/discord.png.")
+        discordiconimg = replacementicon512
+    discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(40, 40))
+    discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:discordbuttonclicked())
+    discordbutton.grid(row=1, column=1, padx=10, pady=10)
+    
+    
+    
+    
+    
+    settingsicon_path = resourcesdir / "settings.png"
+    try:
+        settingsiconimg = Image.open(settingsicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/settings.png.")
+        settingsiconimg = replacementicon512
+    settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(40, 40))
+    settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    settingsbutton.grid(row=1, column=0, padx=10, pady=10)
+    abouticon_path = resourcesdir / "about.png"
+    try:
+        abouticonimg = Image.open(abouticon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/about.png")
+        abouticonimg = replacementicon512
+    abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(40, 40))
+    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    aboutbutton.grid(row=1, column=2, padx=10, pady=10)
+    
+    
+    #hoverfuncs
     timerid = None
     sizeidxub = 40
     currentsize = sizeidxub
@@ -234,15 +299,7 @@ def mainui():
         updateicon.configure(size=(sizeidxub, sizeidxub))
     updatebutton.bind("<Enter>", hoverupdate)
     updatebutton.bind("<Leave>", hoverupdateleave)
-    downloadicon_path = resourcesdir / "download.png"
-    try:
-        downloadiconimg = Image.open(downloadicon_path)
-    except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/download.png.")
-        downloadiconimg = replacementicon512
-    downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(40, 40))
-    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
-    downloadbutton.grid(row=0, column=1, padx=10, pady=10)
+    
     timeriddb = None
     sizeidxdb = 40
     currentsize = sizeidxdb
@@ -276,18 +333,6 @@ def mainui():
         downloadicon.configure(size=(sizeidxdb, sizeidxdb))
     downloadbutton.bind("<Enter>", hoverupdated)
     downloadbutton.bind("<Leave>", hoverupdateleaved)
-        
-        
-    uninstallicon_path = resourcesdir / "uninstall.png"
-    try:
-        uninstalliconimg = Image.open(uninstallicon_path)
-    except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/uninstall.png.")
-        uninstalliconimg = replacementicon512
-    uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(40, 40))
-    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
-    uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
-    
     
     timeriduib = None
     sizeidxuib = 40
@@ -322,37 +367,40 @@ def mainui():
         uninstallicon.configure(size=(sizeidxuib, sizeidxuib))
     uninstallbutton.bind("<Enter>", hoverupdateui)
     uninstallbutton.bind("<Leave>", hoverupdateleaveui)
-        
-        
-        
-    def discordbuttonclicked():
-        discordinvite()
-        print("discord invite")
-    discordicon_path = resourcesdir / "discord.png"
-    try:
-        discordiconimg = Image.open(discordicon_path)
-    except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/discord.png.")
-        discordiconimg = replacementicon512
-    discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(40, 40))
-    discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:discordbuttonclicked())
-    discordbutton.grid(row=1, column=1, padx=10, pady=10)
-    settingsicon_path = resourcesdir / "settings.png"
-    try:
-        settingsiconimg = Image.open(settingsicon_path)
-    except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/settings.png.")
-        settingsiconimg = replacementicon512
-    settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(40, 40))
-    settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
-    settingsbutton.grid(row=1, column=0, padx=10, pady=10)
-    abouticon_path = resourcesdir / "about.png"
-    try:
-        abouticonimg = Image.open(abouticon_path)
-    except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/about.png")
-        abouticonimg = replacementicon512
-    abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(40, 40))
-    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
-    aboutbutton.grid(row=1, column=2, padx=10, pady=10)
+    
+    
+    timeriddib = None
+    sizeidxdib = 40
+    currentsize = sizeidxdib
+    sizeidxdibh = 44
+    def hoverandi(tidxdib):
+        nonlocal timeriddib, sizeidxdib, sizeidxdibh, currentsize
+        if currentsize == tidxdib:
+            timeriddib = None
+            return
+        if currentsize < tidxdib:
+            currentsize += 1
+        else:
+            currentsize -= 1
+        try:
+            discordicon.configure(size=(currentsize, currentsize))
+        except Exception:
+            pass
+        timeriddib = discordbutton.after(20, hoverandi, tidxdib)
+    def hoverupdatedi(event=None ):
+        nonlocal timeriddib
+        if timeriddib is not None:
+            discordbutton.after_cancel(timeriddib)
+            timeriddib = None
+        hoverandi(sizeidxdibh)
+    def hoverupdateleavedi(event=None):
+        nonlocal timeriddib
+        if timeriddib is not None:
+            discordbutton.after_cancel(timeriddib)
+            timeriddib = None
+        hoverandi(sizeidxdib)
+        discordicon.configure(size=(sizeidxdib, sizeidxdib))
+    discordbutton.bind("<Enter>", hoverupdatedi)
+    discordbutton.bind("<Leave>", hoverupdateleavedi)
+    
     app.mainloop()
