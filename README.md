@@ -1,4 +1,5 @@
-<img width="1024" height="384" alt="logofull" src="https://github.com/user-attachments/assets/f780a618-37d7-430e-b8d0-b4214a615468" />
+<img width="1024" height="384" alt="logofull" src="https://github.com/user-attachments/assets/2b4e14cb-c662-4abd-bd41-aecb751e81fd" />
+
 
 # PACKIUM
 discord: https://discord.gg/6efrFAzCY
