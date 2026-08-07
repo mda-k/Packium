@@ -251,10 +251,24 @@ def mainui():
     uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(40, 40))
     uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
-    dummybutton1 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
-    dummybutton1.grid(row=1, column=0, padx=10, pady=10)
-    dummybutton2 = ctk.CTkButton(optionsframe, text="", width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
-    dummybutton2.grid(row=1, column=1, padx=10, pady=10)
+    discordicon_path = resourcesdir / "discord.png"
+    try:
+        discordiconimg = Image.open(discordicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/discord.png.")
+        discordiconimg = replacementicon512
+    discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(40, 40))
+    discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    discordbutton.grid(row=1, column=1, padx=10, pady=10)
+    settingsicon_path = resourcesdir / "settings.png"
+    try:
+        settingsiconimg = Image.open(settingsicon_path)
+    except FileNotFoundError:
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/settings.png.")
+        settingsiconimg = replacementicon512
+    settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(40, 40))
+    settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    settingsbutton.grid(row=1, column=0, padx=10, pady=10)
     abouticon_path = resourcesdir / "about.png"
     try:
         abouticonimg = Image.open(abouticon_path)
