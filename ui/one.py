@@ -31,6 +31,7 @@ if str(functionsdir) not in sys.path:
 #functions
 from update import *
 from about import *
+from discordinvite import *
 
 def mainui():
     app = ctk.CTk() #basic ctk
@@ -286,6 +287,47 @@ def mainui():
     uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(40, 40))
     uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
+    
+    
+    timeriduib = None
+    sizeidxuib = 40
+    currentsize = sizeidxuib
+    sizeidxuibh = 44
+    def hoveranui(tidxuib):
+        nonlocal timeriduib, sizeidxuib, sizeidxuibh, currentsize
+        if currentsize == tidxuib:
+            timeriduib = None
+            return
+        if currentsize < tidxuib:
+            currentsize += 1
+        else:
+            currentsize -= 1
+        try:
+            uninstallicon.configure(size=(currentsize, currentsize))
+        except Exception:
+            pass
+        timeriduib = uninstallbutton.after(20, hoveranui, tidxuib)
+    def hoverupdateui(event=None ):
+        nonlocal timeriduib
+        if timeriduib is not None:
+            uninstallbutton.after_cancel(timeriduib)
+            timeriduib = None
+        hoveranui(sizeidxuibh)
+    def hoverupdateleaveui(event=None):
+        nonlocal timeriduib
+        if timeriduib is not None:
+            uninstallbutton.after_cancel(timeriduib)
+            timeriduib = None
+        hoveranui(sizeidxuib)
+        uninstallicon.configure(size=(sizeidxuib, sizeidxuib))
+    uninstallbutton.bind("<Enter>", hoverupdateui)
+    uninstallbutton.bind("<Leave>", hoverupdateleaveui)
+        
+        
+        
+    def discordbuttonclicked():
+        discordinvite()
+        print("discord invite")
     discordicon_path = resourcesdir / "discord.png"
     try:
         discordiconimg = Image.open(discordicon_path)
@@ -293,7 +335,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/discord.png.")
         discordiconimg = replacementicon512
     discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(40, 40))
-    discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:discordbuttonclicked())
     discordbutton.grid(row=1, column=1, padx=10, pady=10)
     settingsicon_path = resourcesdir / "settings.png"
     try:
