@@ -242,6 +242,41 @@ def mainui():
     downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(40, 40))
     downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     downloadbutton.grid(row=0, column=1, padx=10, pady=10)
+    timeriddb = None
+    sizeidxdb = 40
+    currentsize = sizeidxdb
+    sizeidxdbh = 44
+    def hoverand(tidxdb):
+        nonlocal timeriddb, sizeidxdb, sizeidxdbh, currentsize
+        if currentsize == tidxdb:
+            timeriddb = None
+            return
+        if currentsize < tidxdb:
+            currentsize += 1
+        else:
+            currentsize -= 1
+        try:
+            downloadicon.configure(size=(currentsize, currentsize))
+        except Exception:
+            pass
+        timeriddb = downloadbutton.after(20, hoverand, tidxdb)
+    def hoverupdated(event=None ):
+        nonlocal timeriddb
+        if timeriddb is not None:
+            downloadbutton.after_cancel(timeriddb)
+            timeriddb = None
+        hoverand(sizeidxdbh)
+    def hoverupdateleaved(event=None):
+        nonlocal timeriddb
+        if timeriddb is not None:
+            downloadbutton.after_cancel(timeriddb)
+            timeriddb = None
+        hoverand(sizeidxdb)
+        downloadicon.configure(size=(sizeidxdb, sizeidxdb))
+    downloadbutton.bind("<Enter>", hoverupdated)
+    downloadbutton.bind("<Leave>", hoverupdateleaved)
+        
+        
     uninstallicon_path = resourcesdir / "uninstall.png"
     try:
         uninstalliconimg = Image.open(uninstallicon_path)
