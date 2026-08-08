@@ -154,9 +154,10 @@ def mainui():
                     
                         selectedids.append(name_id_dict[(selecteditem)])
                         print(f"added id to the list. the list: {selectedids}")
+                       
+                    if selectedids:
                         messagebox.showinfo("Notice", "You have pressed the continue button. Packium may or may not freeze for as long as the updates last, since the script is waiting for the subprocess to be done. Please do not kill or interfere with Packium.")
                         messagebox.showinfo("Notice", "A command prompt window will open, so you can see where the update process is standing.")
-                    if selectedids:
                         continuebuttonup.configure(state="disabled", text="Working...")
                         def afterrunupdatethread():
                             
