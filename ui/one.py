@@ -438,4 +438,38 @@ def mainui():
     discordbutton.bind("<Enter>", hoverupdatedi)
     discordbutton.bind("<Leave>", hoverupdateleavedi)
     
+    timeridab = None
+    sizeidxab = 40
+    currentsize = sizeidxab
+    sizeidxabh = 44
+    def hoverana(tidxab):
+        nonlocal timeridab, sizeidxab, sizeidxabh, currentsize
+        if currentsize == tidxab:
+            timeridab = None
+            return
+        if currentsize < tidxab:
+            currentsize += 1
+        else:
+            currentsize -= 1
+        try:
+            abouticon.configure(size=(currentsize, currentsize))
+        except Exception:
+            pass
+        timeridab = aboutbutton.after(20, hoverana, tidxab)
+    def hoverupdatea(event=None ):
+        nonlocal timeridab
+        if timeridab is not None:
+            aboutbutton.after_cancel(timeridab)
+            timeridab = None
+        hoverana(sizeidxabh)
+    def hoverupdateleavea(event=None):
+        nonlocal timeridab
+        if timeridab is not None:
+            aboutbutton.after_cancel(timeridab)
+            timeridab = None
+        hoverana(sizeidxab)
+        abouticon.configure(size=(sizeidxab, sizeidxab))
+    aboutbutton.bind("<Enter>", hoverupdatea)
+    aboutbutton.bind("<Leave>", hoverupdateleavea)
+    
     app.mainloop()
