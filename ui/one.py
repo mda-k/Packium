@@ -268,11 +268,11 @@ def mainui():
     
     #hoverfuncs
     timerid = None
-    sizeidxub = 40
-    currentsize = sizeidxub
-    sizeidxubh = 44
+    sizeidxb = 40
+    currentsize = sizeidxb
+    sizeidxbh = 44
     def hoveran(tidxub):
-        nonlocal timerid, sizeidxub, sizeidxubh, currentsize
+        nonlocal timerid, sizeidxb, sizeidxbh, currentsize
         if currentsize == tidxub:
             timerid = None
             return
@@ -290,23 +290,20 @@ def mainui():
         if timerid is not None:
             updatebutton.after_cancel(timerid)
             timerid = None
-        hoveran(sizeidxubh)
+        hoveran(sizeidxbh)
     def hoverupdateleave(event=None):
         nonlocal timerid
         if timerid is not None:
             updatebutton.after_cancel(timerid)
             timerid = None
-        hoveran(sizeidxub)
-        updateicon.configure(size=(sizeidxub, sizeidxub))
+        hoveran(sizeidxb)
+        updateicon.configure(size=(sizeidxb, sizeidxb))
     updatebutton.bind("<Enter>", hoverupdate)
     updatebutton.bind("<Leave>", hoverupdateleave)
     
     timeriddb = None
-    sizeidxdb = 40
-    currentsize = sizeidxdb
-    sizeidxdbh = 44
     def hoverand(tidxdb):
-        nonlocal timeriddb, sizeidxdb, sizeidxdbh, currentsize
+        nonlocal timeriddb, sizeidxb, sizeidxbh, currentsize
         if currentsize == tidxdb:
             timeriddb = None
             return
@@ -324,23 +321,20 @@ def mainui():
         if timeriddb is not None:
             downloadbutton.after_cancel(timeriddb)
             timeriddb = None
-        hoverand(sizeidxdbh)
+        hoverand(sizeidxbh)
     def hoverupdateleaved(event=None):
         nonlocal timeriddb
         if timeriddb is not None:
             downloadbutton.after_cancel(timeriddb)
             timeriddb = None
-        hoverand(sizeidxdb)
-        downloadicon.configure(size=(sizeidxdb, sizeidxdb))
+        hoverand(sizeidxb)
+        downloadicon.configure(size=(sizeidxb, sizeidxb))
     downloadbutton.bind("<Enter>", hoverupdated)
     downloadbutton.bind("<Leave>", hoverupdateleaved)
     
     timeriduib = None
-    sizeidxuib = 40
-    currentsize = sizeidxuib
-    sizeidxuibh = 44
     def hoveranui(tidxuib):
-        nonlocal timeriduib, sizeidxuib, sizeidxuibh, currentsize
+        nonlocal timeriduib, sizeidxb, sizeidxbh, currentsize
         if currentsize == tidxuib:
             timeriduib = None
             return
@@ -358,24 +352,20 @@ def mainui():
         if timeriduib is not None:
             uninstallbutton.after_cancel(timeriduib)
             timeriduib = None
-        hoveranui(sizeidxuibh)
+        hoveranui(sizeidxbh)
     def hoverupdateleaveui(event=None):
         nonlocal timeriduib
         if timeriduib is not None:
             uninstallbutton.after_cancel(timeriduib)
             timeriduib = None
-        hoveranui(sizeidxuib)
-        uninstallicon.configure(size=(sizeidxuib, sizeidxuib))
+        hoveranui(sizeidxb)
+        uninstallicon.configure(size=(sizeidxb, sizeidxb))
     uninstallbutton.bind("<Enter>", hoverupdateui)
     uninstallbutton.bind("<Leave>", hoverupdateleaveui)
     
-    
     timeridseb = None
-    sizeidxsb = 40
-    currentsize = sizeidxsb
-    sizeidxsbh = 44
     def hoverans(tidxsb):
-        nonlocal timeridseb, sizeidxsb, sizeidxsbh, currentsize
+        nonlocal timeridseb, sizeidxb, sizeidxbh, currentsize
         if currentsize == tidxsb:
             timeridseb = None
             return
@@ -393,23 +383,20 @@ def mainui():
         if timeridseb is not None:
             settingsbutton.after_cancel(timeridseb)
             timeridseb = None
-        hoverans(sizeidxsbh)
+        hoverans(sizeidxbh)
     def hoverupdateleaves(event=None):
         nonlocal timeridseb
         if timeridseb is not None:
             settingsbutton.after_cancel(timeridseb)
             timeridseb = None
-        hoverans(sizeidxsb)
-        settingsicon.configure(size=(sizeidxsb, sizeidxsb))
+        hoverans(sizeidxb)
+        settingsicon.configure(size=(sizeidxb, sizeidxb))
     settingsbutton.bind("<Enter>", hoverupdates)
     settingsbutton.bind("<Leave>", hoverupdateleaves)
     
     timeriddib = None
-    sizeidxdib = 40
-    currentsize = sizeidxdib
-    sizeidxdibh = 44
     def hoverandi(tidxdib):
-        nonlocal timeriddib, sizeidxdib, sizeidxdibh, currentsize
+        nonlocal timeriddib, sizeidxb, sizeidxbh, currentsize
         if currentsize == tidxdib:
             timeriddib = None
             return
@@ -427,23 +414,20 @@ def mainui():
         if timeriddib is not None:
             discordbutton.after_cancel(timeriddib)
             timeriddib = None
-        hoverandi(sizeidxdibh)
+        hoverandi(sizeidxbh)
     def hoverupdateleavedi(event=None):
         nonlocal timeriddib
         if timeriddib is not None:
             discordbutton.after_cancel(timeriddib)
             timeriddib = None
-        hoverandi(sizeidxdib)
-        discordicon.configure(size=(sizeidxdib, sizeidxdib))
+        hoverandi(sizeidxb)
+        discordicon.configure(size=(sizeidxb, sizeidxb))
     discordbutton.bind("<Enter>", hoverupdatedi)
     discordbutton.bind("<Leave>", hoverupdateleavedi)
     
     timeridab = None
-    sizeidxab = 40
-    currentsize = sizeidxab
-    sizeidxabh = 44
     def hoverana(tidxab):
-        nonlocal timeridab, sizeidxab, sizeidxabh, currentsize
+        nonlocal timeridab, sizeidxb, sizeidxbh, currentsize
         if currentsize == tidxab:
             timeridab = None
             return
@@ -461,14 +445,14 @@ def mainui():
         if timeridab is not None:
             aboutbutton.after_cancel(timeridab)
             timeridab = None
-        hoverana(sizeidxabh)
+        hoverana(sizeidxbh)
     def hoverupdateleavea(event=None):
         nonlocal timeridab
         if timeridab is not None:
             aboutbutton.after_cancel(timeridab)
             timeridab = None
-        hoverana(sizeidxab)
-        abouticon.configure(size=(sizeidxab, sizeidxab))
+        hoverana(sizeidxb)
+        abouticon.configure(size=(sizeidxb, sizeidxb))
     aboutbutton.bind("<Enter>", hoverupdatea)
     aboutbutton.bind("<Leave>", hoverupdateleavea)
     
