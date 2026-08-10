@@ -66,10 +66,13 @@ def mainui():
     
     
     #appearance variables
-    buttoncolor = "#3b3b3b"
-    buttoncolor_hover = "#787878"
-    replacementicon_color = "#3b3b3b"
-    replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color)
+    buttoncolor = "#3b3b3b" #color of the buttons.
+    buttoncolor_hover = "#787878" #color of the button when hovered over
+    replacementicon_color = "#3b3b3b" #color of the replacement icons
+    replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color) #replacement icon for buttons.
+    replacementiconapp = Image.new("RGB", (32, 32), color=replacementicon_color) #the replacement icon of the app itself
+    sizeidxb = 40 #the normal size of the icons
+    sizeidxbh = 44 #hover size of the icons
     
     
     #icon
@@ -78,7 +81,7 @@ def mainui():
         app.iconbitmap(appicon)
     except Exception:
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
-        appicon = Image.new("RGB", (32, 32), color=replacementicon_color)
+        appicon = replacementiconapp
         
     #rounded corner frame
     overlayframe = ctk.CTkFrame(app, corner_radius=25)
@@ -213,7 +216,7 @@ def mainui():
     except FileNotFoundError:
         updateiconimg = replacementicon512
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/update.png.")
-    updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(40, 40))
+    updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(sizeidxb, sizeidxb))
     updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
 
@@ -223,7 +226,7 @@ def mainui():
     except FileNotFoundError:
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/download.png.")
         downloadiconimg = replacementicon512
-    downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(40, 40))
+    downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(sizeidxb, sizeidxb))
     downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     downloadbutton.grid(row=0, column=1, padx=10, pady=10)
         
@@ -234,7 +237,7 @@ def mainui():
     except FileNotFoundError:
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/uninstall.png.")
         uninstalliconimg = replacementicon512
-    uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(40, 40))
+    uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(sizeidxb, sizeidxb))
     uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
     
@@ -249,7 +252,7 @@ def mainui():
     except FileNotFoundError:
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/discord.png.")
         discordiconimg = replacementicon512
-    discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(40, 40))
+    discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(sizeidxb, sizeidxb))
     discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:discordbuttonclicked())
     discordbutton.grid(row=1, column=1, padx=10, pady=10)
     
@@ -261,7 +264,7 @@ def mainui():
     except FileNotFoundError:
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/settings.png.")
         settingsiconimg = replacementicon512
-    settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(40, 40))
+    settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(sizeidxb, sizeidxb))
     settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     settingsbutton.grid(row=1, column=0, padx=10, pady=10)
     abouticon_path = resourcesdir / "about.png"
@@ -270,16 +273,14 @@ def mainui():
     except FileNotFoundError:
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/about.png")
         abouticonimg = replacementicon512
-    abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(40, 40))
+    abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(sizeidxb, sizeidxb))
     aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
     aboutbutton.grid(row=1, column=2, padx=10, pady=10)
     
     
     #hoverfuncs
     timerid = None
-    sizeidxb = 40
-    currentsize = sizeidxb
-    sizeidxbh = 44
+    currentsize = sizeidxb 
     def hoveran(tidxub):
         nonlocal timerid, sizeidxb, sizeidxbh, currentsize
         if currentsize == tidxub:
