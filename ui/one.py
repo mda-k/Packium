@@ -43,6 +43,20 @@ def mainui():
         app.destroy()
         app.quit()
     app.protocol("WM_DELETE_WINDOW", FUCKMYLIFE)
+    def normalstatebuttons():
+        updatebutton.configure(state="normal")
+        downloadbutton.configure(state="normal")
+        uninstallbutton.configure(state="normal")
+        settingsbutton.configure(state="normal")
+        discordbutton.configure(state="normal")
+        aboutbutton.configure(state="normal")
+    def disabledstatebuttons():
+        updatebutton.configure(state="disabled")
+        downloadbutton.configure(state="disabled")
+        uninstallbutton.configure(state="disabled")
+        settingsbutton.configure(state="disabled")
+        discordbutton.configure(state="disabled")
+        aboutbutton.configure(state="disabled")
     app.title("Packium")
     app.attributes("-topmost", True)
     transparent_color = "#000001"
@@ -81,7 +95,7 @@ def mainui():
     
     def updatebutton_pressed():
         print("update button pressed.")
-        updatebutton.configure(state="disabled")
+        disabledstatebuttons()
         messagebox.showinfo("Notice", "Winget may or may not reinstall the program to it's original path. I haven't been able to figure out how it's possible to force Winget to keep the updated program at it's original path, especially if some vendors just do not accept Winget's --location parameter. Before using the program's update feature, you should know, that some programs might be moved to the C: drive, the vendor's hardcoded/default installation path.")
         def fetchupdates():
             name_id_dict = winget_update()
@@ -123,7 +137,7 @@ def mainui():
                     y = update_popup.winfo_y() + deltay
                     update_popup.geometry(f"+{x}+{y}")
                 def exitup():
-                    updatebutton.configure(state="normal")
+                    normalstatebuttons()
                     update_popup.destroy()
                 overlayframeup = ctk.CTkFrame(update_popup, corner_radius=25)
                 overlayframeup.pack(fill="both", expand=True)
@@ -163,7 +177,7 @@ def mainui():
                             
                             print(f"the update is done.")
                             messagebox.showinfo("Task done!", "All the selected programs have been updated!")
-                            updatebutton.configure(state="normal")
+                            normalstatebuttons()
                             update_popup.destroy()
                         def runupdatethread():
                             cmd = ["winget", "upgrade", *selectedids]
@@ -225,10 +239,7 @@ def mainui():
     uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
     
     
-    
-        
-        
-        
+
     def discordbuttonclicked():
         discordinvite()
         print("discord invite")
@@ -241,8 +252,6 @@ def mainui():
     discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(40, 40))
     discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:discordbuttonclicked())
     discordbutton.grid(row=1, column=1, padx=10, pady=10)
-    
-    
     
     
     
