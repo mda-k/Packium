@@ -5,3 +5,4 @@ replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color)
 replacementiconapp = Image.new("RGB", (32, 32), color=replacementicon_color)
 sizeidxb = 40
 sizeidxbh = 44
+maingeometry = "300x200"

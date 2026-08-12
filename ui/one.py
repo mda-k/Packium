@@ -34,8 +34,38 @@ from about import *
 from discordinvite import *
 
 def mainui():
-    app = ctk.CTk() #basic ctk
-    app.geometry("300x200")
+    #appearance variables
+    context = {**globals(), **locals()}
+    sizeidxb = 5
+    sizeidxbh = 5
+    optionspath = currentdir / "options.txt" 
+    with open(optionspath, "r", encoding="utf-8") as optionsfile:
+        for line in optionsfile:
+            line.strip()
+            print(line)
+            if "=" in line:
+                print(f"found =: {line}")
+                exec(line, context)
+    buttoncolor = context.get("buttoncolor")
+    buttoncolor_hover = context.get("buttoncolor_hover")
+    replacementicon_color = context.get("replacementicon_color")
+    replacementicon512 = context.get("replacementicon512")
+    replacementiconapp = context.get("replacementiconapp")
+    sizeidxb = context.get("sizeidxb", sizeidxb)
+    sizeidxbh = context.get("sizeidxbh", sizeidxbh)
+    maingeometry = context.get("maingeometry")
+    
+    print(f"button color: {buttoncolor}") #color of the buttons
+    print(f"hover button color: {buttoncolor_hover}") #color of the button when hovered over
+    print(f"replacement icon color: {replacementicon_color}")#color of the replacement icons
+    print(f"replacement icon 512x512 for the buttons: {replacementicon512}") #replacement icon for buttons.
+    print(f"replacement icon for the program: {replacementiconapp}") #the replacement icon of the app itself
+    print(f"size of the icons: {sizeidxb}") #the normal size of the icons
+    print(f"size of the icons when hovered over: {sizeidxbh}") #hover size of the icons
+    print(f"main packium window geometry: {maingeometry}") #geometry of the main packium window...
+    
+    app = ctk.CTk()
+    app.geometry(maingeometry)
     app.overrideredirect(True)
     ctk.set_appearance_mode("Dark")
     ctk.set_default_color_theme("dark-blue")
@@ -63,35 +93,6 @@ def mainui():
     app.attributes("-alpha", 0.7)
     app.attributes("-transparentcolor", transparent_color)
     app.configure(fg_color=transparent_color)
-    
-    #appearance variables
-    context = {**globals(), **locals()}
-    sizeidxb = 5
-    sizeidxbh = 5
-    optionspath = currentdir / "options.txt" 
-    with open(optionspath, "r", encoding="utf-8") as optionsfile:
-        for line in optionsfile:
-            line.strip()
-            print(line)
-            if "=" in line:
-                print(f"found =: {line}")
-                exec(line, context)
-    buttoncolor = context.get("buttoncolor")
-    buttoncolor_hover = context.get("buttoncolor_hover")
-    replacementicon_color = context.get("replacementicon_color")
-    replacementicon512 = context.get("replacementicon512")
-    replacementiconapp = context.get("replacementiconapp")
-    sizeidxb = context.get("sizeidxb", sizeidxb)
-    sizeidxbh = context.get("sizeidxbh", sizeidxbh)
-    
-    print(f"button color: {buttoncolor}") #color of the buttons
-    print(f"hover button color: {buttoncolor_hover}") #color of the button when hovered over
-    print(f"replacement icon color: {replacementicon_color}")#color of the replacement icons
-    print(f"replacement icon 512x512 for the buttons: {replacementicon512}") #replacement icon for buttons.
-    print(f"replacement icon for the program: {replacementiconapp}") #the replacement icon of the app itself
-    print(f"size of the icons: {sizeidxb}") #the normal size of the icons
-    print(f"size of the icons when hovered over: {sizeidxbh}") #hover size of the icons
-    
     
     #icon
     appicon = resourcesdir / "icon.ico"
