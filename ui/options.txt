@@ -1,0 +1,7 @@
+buttoncolor = "#3b3b3b"
+buttoncolor_hover = "#787878"
+replacementicon_color = "#3b3b3b"
+replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color)
+replacementiconapp = Image.new("RGB", (32, 32), color=replacementicon_color)
+sizeidxb = 40
+sizeidxbh = 44

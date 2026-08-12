@@ -64,15 +64,33 @@ def mainui():
     app.attributes("-transparentcolor", transparent_color)
     app.configure(fg_color=transparent_color)
     
-    
     #appearance variables
-    buttoncolor = "#3b3b3b" #color of the buttons.
-    buttoncolor_hover = "#787878" #color of the button when hovered over
-    replacementicon_color = "#3b3b3b" #color of the replacement icons
-    replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color) #replacement icon for buttons.
-    replacementiconapp = Image.new("RGB", (32, 32), color=replacementicon_color) #the replacement icon of the app itself
-    sizeidxb = 40 #the normal size of the icons
-    sizeidxbh = 44 #hover size of the icons
+    context = {**globals(), **locals()}
+    sizeidxb = 5
+    sizeidxbh = 5
+    optionspath = currentdir / "options.txt" 
+    with open(optionspath, "r", encoding="utf-8") as optionsfile:
+        for line in optionsfile:
+            line.strip()
+            print(line)
+            if "=" in line:
+                print(f"found =: {line}")
+                exec(line, context)
+    buttoncolor = context.get("buttoncolor")
+    buttoncolor_hover = context.get("buttoncolor_hover")
+    replacementicon_color = context.get("replacementicon_color")
+    replacementicon512 = context.get("replacementicon512")
+    replacementiconapp = context.get("replacementiconapp")
+    sizeidxb = context.get("sizeidxb", sizeidxb)
+    sizeidxbh = context.get("sizeidxbh", sizeidxbh)
+    
+    print(f"button color: {buttoncolor}") #color of the buttons
+    print(f"hover button color: {buttoncolor_hover}") #color of the button when hovered over
+    print(f"replacement icon color: {replacementicon_color}")#color of the replacement icons
+    print(f"replacement icon 512x512 for the buttons: {replacementicon512}") #replacement icon for buttons.
+    print(f"replacement icon for the program: {replacementiconapp}") #the replacement icon of the app itself
+    print(f"size of the icons: {sizeidxb}") #the normal size of the icons
+    print(f"size of the icons when hovered over: {sizeidxbh}") #hover size of the icons
     
     
     #icon
