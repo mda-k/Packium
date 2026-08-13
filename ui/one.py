@@ -54,6 +54,9 @@ def mainui():
     sizeidxb = context.get("sizeidxb", sizeidxb)
     sizeidxbh = context.get("sizeidxbh", sizeidxbh)
     maingeometry = context.get("maingeometry")
+    appearancemode = context.get("appearancemode")
+    defaultcolortheme = context.get("defaultcolortheme")
+    wopacity = context.get("wopacity")
     
     print(f"button color: {buttoncolor}") #color of the buttons
     print(f"hover button color: {buttoncolor_hover}") #color of the button when hovered over
@@ -63,12 +66,16 @@ def mainui():
     print(f"size of the icons: {sizeidxb}") #the normal size of the icons
     print(f"size of the icons when hovered over: {sizeidxbh}") #hover size of the icons
     print(f"main packium window geometry: {maingeometry}") #geometry of the main packium window...
+    print(f"appearance mode is: {appearancemode}") #theme, light or dark, blah blah
+    print(f"default color theme is: {defaultcolortheme}") #color theme
+    print(f"opacity of the program is: {wopacity}") #opacity of the windows
+    
     
     app = ctk.CTk()
     app.geometry(maingeometry)
     app.overrideredirect(True)
-    ctk.set_appearance_mode("Dark")
-    ctk.set_default_color_theme("dark-blue")
+    ctk.set_appearance_mode(appearancemode)
+    ctk.set_default_color_theme(defaultcolortheme)
     def FUCKMYLIFE(): #exit
         app.destroy()
         app.quit()
@@ -90,7 +97,7 @@ def mainui():
     app.title("Packium")
     app.attributes("-topmost", True)
     transparent_color = "#000001"
-    app.attributes("-alpha", 0.7)
+    app.attributes("-alpha", wopacity)
     app.attributes("-transparentcolor", transparent_color)
     app.configure(fg_color=transparent_color)
     
@@ -138,7 +145,7 @@ def mainui():
                 update_popup.geometry("400x400")
                 update_popup.attributes("-topmost", True)
                 transparent_color = "#000001"
-                update_popup.attributes("-alpha", 0.7)
+                update_popup.attributes("-alpha", wopacity)
                 update_popup.attributes("-transparentcolor", transparent_color)
                 update_popup.configure(fg_color=transparent_color)
                 update_popup.grab_set()
