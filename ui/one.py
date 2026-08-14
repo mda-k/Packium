@@ -155,7 +155,7 @@ def mainui():
                     update_popup.after(200, lambda: update_popup.iconbitmap(appicon))
                 except Exception:
                     messagebox.showerror("Error", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
-                    appicon = Image.new("RGB", (32, 32), color=replacementicon_color)
+                    appicon = replacementiconapp
                 def startmove(event):
                     update_popup.x = event.x
                     update_popup.y = event.y
@@ -217,7 +217,59 @@ def mainui():
                         
                 continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
                 continuebuttonup.pack(pady=10)
-            
+    def settingsbuttonpressed():
+        print("settings button pressed.")
+        disabledstatebuttons()
+        settings_popup = ctk.CTkToplevel(app)
+        settings_popup.overrideredirect(True)
+        settings_popup.title("Settings")
+        settings_popup.geometry("400x400")
+        settings_popup.attributes("-topmost", True)
+        transparent_color = "#000001"
+        settings_popup.attributes("-alpha", wopacity)
+        settings_popup.attributes("-transparentcolor", transparent_color)
+        settings_popup.configure(fg_color=transparent_color)
+        settings_popup.grab_set()
+        settings_popup.focus_set()
+        appicon = resourcesdir / "icon.ico"
+        try:
+            settings_popup.after(200, lambda: settings_popup.iconbitmap(appicon))
+        except Exception:
+            messagebox.showerror("Error", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
+            appicon = replacementiconapp
+        def startmove(event):
+            settings_popup.x = event.x
+            settings_popup.y = event.y
+        def move(event):
+            deltax = event.x - settings_popup.x
+            deltay = event.y - settings_popup.y
+            x = settings_popup.winfo_x() + deltax
+            y = settings_popup.winfo_y() + deltay
+            settings_popup.geometry(f"+{x}+{y}")
+        def exitsb():
+            normalstatebuttons()
+            settings_popup.destroy()
+        overlayframesb = ctk.CTkFrame(settings_popup, corner_radius=25)
+        overlayframesb.pack(fill="both", expand=True)
+        overlayframesb.bind("<Button-1>", startmove)
+        overlayframesb.bind("<B1-Motion>", move)
+        closesb = ctk.CTkButton(overlayframesb, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitsb())
+        closesb.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
+        settingslabel = ctk.CTkLabel(overlayframesb, text="Settings", font=("Arial", 16, "bold"), text_color="white")
+        settingslabel.pack(pady=2)
+        settingslabel.bind("<Button-1>", startmove)
+        settingslabel.bind("<B1-Motion>", move)
+        comingsoonlabel = ctk.CTkLabel(overlayframesb, text="Coming soon!", font=("Arial", 24, "bold"), text_color="white")
+        comingsoonlabel.pack(pady=20)
+        applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
+        applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
+        cancelbutton = ctk.CTkButton(overlayframesb, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
+        cancelbutton.place(relx=0.0, rely=1.0, x=12, y=-12, anchor="sw")
+        def applysettings():
+            print("apply settings button pressed.")
+        def cancelsettings():
+            print("cancel settings button pressed.")
+            exitsb()
     def startmove(event):
         app.x = event.x
         app.y = event.y
@@ -291,7 +343,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/settings.png.")
         settingsiconimg = replacementicon512
     settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(sizeidxb, sizeidxb))
-    settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:settingsbuttonpressed())
     settingsbutton.grid(row=1, column=0, padx=10, pady=10)
     abouticon_path = resourcesdir / "about.png"
     try:
