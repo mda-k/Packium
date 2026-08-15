@@ -8,6 +8,7 @@ import sys
 import time
 import threading
 from CTkColorPicker import AskColor
+import shutil
 
 
 #directories
@@ -39,7 +40,8 @@ def mainui():
     context = {**globals(), **locals()}
     sizeidxb = 5
     sizeidxbh = 5
-    optionspath = currentdir / "options.txt" 
+    optionspath = currentdir / "options.packium"
+    defaultoptionspath = currentdir / "default.packium"
     with open(optionspath, "r", encoding="utf-8") as optionsfile:
         for line in optionsfile:
             line.strip()
@@ -260,8 +262,13 @@ def mainui():
         settingslabel.pack(pady=2)
         settingslabel.bind("<Button-1>", startmove)
         settingslabel.bind("<B1-Motion>", move)
-        buttoncolorfield = ctk.CTkButton(overlayframesb, text="Change the color of the buttons", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
-        buttoncolorfield.pack()
+        resetbutton = ctk.CTkButton(overlayframesb, text="set settings back to default", font=("Arial", 16), fg_color=buttoncolor, hover_color="#613e3a", width=40, height=20, corner_radius=20, command=lambda:resetsettings())
+        resetbutton.pack()
+        buttoncolorfield = ctk.CTkButton(overlayframesb, text="change the color of the buttons", font=("Arial", 16), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
+        buttoncolorfield.pack(anchor="w", padx=10, pady=(20, 2))
+        buttonhovercolorfield = ctk.CTkButton(overlayframesb, text="change the color of the buttons in hover state", font=("Arial", 16), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolorhover())
+        buttonhovercolorfield.pack(anchor="w", padx=10, pady=2)
+        
         
         comingsoonlabel = ctk.CTkLabel(overlayframesb, text="Under construction!", font=("Arial", 24, "bold"), text_color="white")
         comingsoonlabel.pack(pady=20)
@@ -269,6 +276,15 @@ def mainui():
         applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
         cancelbutton = ctk.CTkButton(overlayframesb, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
         cancelbutton.place(relx=0.0, rely=1.0, x=12, y=-12, anchor="sw")
+        def resetsettings():
+            confirmreset = messagebox.askyesno("Are you sure?", "Are you sure you want to reset your Packium appearance settings?")
+            if confirmreset:
+                print("user confirmed.")
+                shutil.copyfile(defaultoptionspath, optionspath)
+                print("settings have been set to the default!")
+                messagebox.showinfo("Notice", "Settings have been set to the default!")
+            else:
+                print("user changed their mind.")
         def applysettings():
             print("apply settings button pressed.")
         def cancelsettings():
@@ -281,6 +297,13 @@ def mainui():
             if buttoncolor_TEMP :
                 print(f"selected color is {buttoncolor_TEMP}")
                 buttoncolorfield.configure(fg_color=buttoncolor_TEMP)
+        def pickbuttoncolorhover():
+            print("button hover color button pressed.")
+            buttoncolorhover_pick = AskColor()
+            buttoncolor_hover_TEMP = buttoncolorhover_pick.get()
+            if buttoncolor_hover_TEMP :
+                print(f"selected color is {buttoncolor_hover_TEMP}")
+                buttoncolorfield.configure(fg_color=buttoncolor_hover_TEMP)
     def startmove(event):
         app.x = event.x
         app.y = event.y
