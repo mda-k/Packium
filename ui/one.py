@@ -7,6 +7,7 @@ from tkinter import messagebox
 import sys
 import time
 import threading
+from CTkColorPicker import AskColor
 
 
 #directories
@@ -259,7 +260,10 @@ def mainui():
         settingslabel.pack(pady=2)
         settingslabel.bind("<Button-1>", startmove)
         settingslabel.bind("<B1-Motion>", move)
-        comingsoonlabel = ctk.CTkLabel(overlayframesb, text="Coming soon!", font=("Arial", 24, "bold"), text_color="white")
+        buttoncolorfield = ctk.CTkButton(overlayframesb, text="Change the color of the buttons", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
+        buttoncolorfield.pack()
+        
+        comingsoonlabel = ctk.CTkLabel(overlayframesb, text="Under construction!", font=("Arial", 24, "bold"), text_color="white")
         comingsoonlabel.pack(pady=20)
         applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
         applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
@@ -270,6 +274,13 @@ def mainui():
         def cancelsettings():
             print("cancel settings button pressed.")
             exitsb()
+        def pickbuttoncolor():
+            print("button color button pressed.")
+            buttoncolor_pick = AskColor()
+            buttoncolor_TEMP = buttoncolor_pick.get()
+            if buttoncolor_TEMP :
+                print(f"selected color is {buttoncolor_TEMP}")
+                buttoncolorfield.configure(fg_color=buttoncolor_TEMP)
     def startmove(event):
         app.x = event.x
         app.y = event.y
