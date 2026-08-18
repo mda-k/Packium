@@ -422,7 +422,7 @@ def mainui():
                             optionsfilewrite.write(line)
                     else:
                         optionsfilewrite.write(line)
-            if buttoncolorchanged == True or buttonhovercolorchanged == True:
+            if buttoncolorchanged == True or buttonhovercolorchanged == True or themechanged == True:
                 messagebox.showinfo("Notice", "To see the changes, you have to restart the program.")
             print("settings applied.")
             exitsb()

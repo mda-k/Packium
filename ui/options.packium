@@ -6,6 +6,6 @@ replacementiconapp = Image.new("RGB", (32, 32), color=replacementicon_color)
 sizeidxb = 40
 sizeidxbh = 44
 maingeometry = "300x200"
-appearancemode = "Dark"
+appearancemode = "System"
 defaultcolortheme = "dark-blue"
 wopacity = 0.7
