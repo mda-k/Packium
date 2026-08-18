@@ -249,6 +249,16 @@ def mainui():
             x = settings_popup.winfo_x() + deltax
             y = settings_popup.winfo_y() + deltay
             settings_popup.geometry(f"+{x}+{y}")
+        def enterdangerzone(event=None):
+            dangerzoneframe.configure(fg_color="#320504")
+        def leavedangerzone(event=None):
+            dangerzoneframe.configure(fg_color="#191919")
+        def enterdangerzoneresetbutton(event=None): #i know i can use hover_color= blah blah, but because of the new bindings, i do have to use this..
+            dangerzoneframe.configure(fg_color="#320504")
+            resetbutton.configure(fg_color="#a31c1c")
+        def leavedangerzoneresetbutton(event=None):
+            dangerzoneframe.configure(fg_color="#191919")
+            resetbutton.configure(fg_color=buttoncolor)
         def exitsb():
             normalstatebuttons()
             settings_popup.destroy()
@@ -309,12 +319,18 @@ def mainui():
         dangerzoneframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         dangerzoneframelabel = ctk.CTkLabel(dangerzoneframe, text="Danger zone", font=("Arial", 16, "bold"), text_color="white")
         dangerzoneframelabel.pack()
-        resetbutton = ctk.CTkButton(dangerzoneframe, text="set settings back to default", font=("Arial", 16), fg_color=buttoncolor, hover_color="#613e3a", width=40, height=20, corner_radius=20, command=lambda:resetsettings())
+        resetbutton = ctk.CTkButton(dangerzoneframe, text="set settings back to default", font=("Arial", 16), fg_color=buttoncolor, width=40, height=20, corner_radius=20, command=lambda:resetsettings())
         resetbutton.pack(pady=(0, 10))
         dangerzoneframe.bind("<Button-1>", startmove)
         dangerzoneframe.bind("<B1-Motion>", move)
         dangerzoneframelabel.bind("<Button-1>", startmove)
         dangerzoneframelabel.bind("<B1-Motion>", move)
+        dangerzoneframe.bind("<Enter>", enterdangerzone)
+        dangerzoneframe.bind("<Leave>", leavedangerzone)
+        dangerzoneframelabel.bind("<Enter>", enterdangerzone)
+        dangerzoneframelabel.bind("<Leave>", leavedangerzone)
+        resetbutton.bind("<Enter>", enterdangerzoneresetbutton)
+        resetbutton.bind("<Leave>", leavedangerzoneresetbutton)
         
         applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
         applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
@@ -358,6 +374,13 @@ def mainui():
             buttoncolorchanged = None
             buttonhovercolorchanged = None
             print("apply settings button pressed.")
+            appearancemode_TEMP = appthemefield.get()
+            print(appearancemode_TEMP)
+            themechanged = None
+            if appearancemode != appearancemode_TEMP:
+                themechanged = True
+            else:
+                themechanged = False
             nonlocal buttoncolor_TEMP
             nonlocal bttoncolor_hover_TEMP
             print(f"button color value in settings is: {buttoncolor_TEMP}")
@@ -388,8 +411,14 @@ def mainui():
                     elif line.startswith("buttoncolor"):
                         if buttoncolorchanged == True:
                             optionsfilewrite.write(f'buttoncolor = "{buttoncolor_TEMP}"\n')
-                            print("wrote it (bttoncolor_hover)")
+                            print("wrote it (buttoncolor)")
                         elif buttoncolorchanged == False or buttoncolorchanged == None:
+                            optionsfilewrite.write(line)
+                    elif line.startswith("appearancemode"):
+                        if themechanged == True:
+                            optionsfilewrite.write(f'appearancemode = "{appearancemode_TEMP}"\n')
+                            print("wrote it (appearancemode/theme)")
+                        if themechanged == False or themechanged == None:
                             optionsfilewrite.write(line)
                     else:
                         optionsfilewrite.write(line)
