@@ -50,7 +50,7 @@ def mainui():
                 print(f"found =: {line}")
                 exec(line, context)
     buttoncolor = context.get("buttoncolor")
-    buttoncolor_hover = context.get("buttoncolor_hover")
+    bttoncolor_hover = context.get("bttoncolor_hover")
     replacementicon_color = context.get("replacementicon_color")
     replacementicon512 = context.get("replacementicon512")
     replacementiconapp = context.get("replacementiconapp")
@@ -62,7 +62,7 @@ def mainui():
     wopacity = context.get("wopacity")
     
     print(f"button color: {buttoncolor}") #color of the buttons
-    print(f"hover button color: {buttoncolor_hover}") #color of the button when hovered over
+    print(f"hover button color: {bttoncolor_hover}") #color of the button when hovered over
     print(f"replacement icon color: {replacementicon_color}")#color of the replacement icons
     print(f"replacement icon 512x512 for the buttons: {replacementicon512}") #replacement icon for buttons.
     print(f"replacement icon for the program: {replacementiconapp}") #the replacement icon of the app itself
@@ -218,7 +218,7 @@ def mainui():
                             app.after(0, lambda: afterrunupdatethread())
                         threading.Thread(target=runupdatethread, daemon=True).start()
                         
-                continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
+                continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
                 continuebuttonup.pack(pady=10)
     def settingsbuttonpressed():
         print("settings button pressed.")
@@ -259,23 +259,69 @@ def mainui():
         closesb = ctk.CTkButton(overlayframesb, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitsb())
         closesb.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
         settingslabel = ctk.CTkLabel(overlayframesb, text="Settings", font=("Arial", 16, "bold"), text_color="white")
-        settingslabel.pack(pady=2)
+        settingslabel.pack()
         settingslabel.bind("<Button-1>", startmove)
         settingslabel.bind("<B1-Motion>", move)
-        resetbutton = ctk.CTkButton(overlayframesb, text="set settings back to default", font=("Arial", 16), fg_color=buttoncolor, hover_color="#613e3a", width=40, height=20, corner_radius=20, command=lambda:resetsettings())
-        resetbutton.pack()
-        buttoncolorfield = ctk.CTkButton(overlayframesb, text="change the color of the buttons", font=("Arial", 16), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
-        buttoncolorfield.pack(anchor="w", padx=10, pady=(20, 2))
-        buttonhovercolorfield = ctk.CTkButton(overlayframesb, text="change the color of the buttons in hover state", font=("Arial", 16), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolorhover())
-        buttonhovercolorfield.pack(anchor="w", padx=10, pady=2)
+
+        generalfieldframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
+        generalfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
+        generalfieldframelabel = ctk.CTkLabel(generalfieldframe, text="General settings", font=("Arial", 16, "bold"), text_color="white")
+        generalfieldframelabel.pack()
+        appthemefieldlabel = ctk.CTkLabel(generalfieldframe, text="The theme of Packium:", font=("Arial", 16), text_color="white")
+        appthemefieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
+        appthemeoptions = ["Light", "Dark", "System"]
+        appthemefield = ctk.CTkOptionMenu(generalfieldframe, values=appthemeoptions, dynamic_resizing=False, fg_color=buttoncolor, corner_radius=20)
+        appthemefield.set(appearancemode)
+        appthemefield.pack(anchor="w", padx=10, pady=(0, 10))
+        generalfieldframe.bind("<Button-1>", startmove)
+        generalfieldframe.bind("<B1-Motion>", move)
+        generalfieldframelabel.bind("<Button-1>", startmove)
+        generalfieldframelabel.bind("<B1-Motion>", move)
+        appthemefieldlabel.bind("<Button-1>", startmove)
+        appthemefieldlabel.bind("<B1-Motion>", move)
+
+
+
+        buttonfieldframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
+        buttonfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
+        buttonfieldframelabel = ctk.CTkLabel(buttonfieldframe, text="Settings related to buttons", font=("Arial", 16, "bold"), text_color="white")
+        buttonfieldframelabel.pack()
+        buttoncolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons:", font=("Arial", 16), text_color="white")
+        buttoncolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
+        buttoncolorfield = ctk.CTkButton(buttonfieldframe, text=buttoncolor, font=("Arial", 16), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
+        buttoncolorfield.pack(anchor="w", padx=10, pady=(0, 10))
+        
+        buttonhovercolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons when hovered over:", font=("Arial", 16), text_color="white")
+        buttonhovercolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
+        buttonhovercolorfield = ctk.CTkButton(buttonfieldframe, text=bttoncolor_hover, font=("Arial", 16), fg_color=bttoncolor_hover, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolorhover())
+        buttonhovercolorfield.pack(anchor="w", padx=10, pady=(0, 10))
+        buttonfieldframe.bind("<Button-1>", startmove)
+        buttonfieldframe.bind("<B1-Motion>", move)
+        buttonfieldframelabel.bind("<Button-1>", startmove)
+        buttonfieldframelabel.bind("<B1-Motion>", move)
+        buttoncolorfieldlabel.bind("<Button-1>", startmove)
+        buttoncolorfieldlabel.bind("<B1-Motion>", move)
+        buttonhovercolorfieldlabel.bind("<Button-1>", startmove)
+        buttonhovercolorfieldlabel.bind("<B1-Motion>", move)
         
         
-        comingsoonlabel = ctk.CTkLabel(overlayframesb, text="Under construction!", font=("Arial", 24, "bold"), text_color="white")
-        comingsoonlabel.pack(pady=20)
-        applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
+        dangerzoneframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
+        dangerzoneframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
+        dangerzoneframelabel = ctk.CTkLabel(dangerzoneframe, text="Danger zone", font=("Arial", 16, "bold"), text_color="white")
+        dangerzoneframelabel.pack()
+        resetbutton = ctk.CTkButton(dangerzoneframe, text="set settings back to default", font=("Arial", 16), fg_color=buttoncolor, hover_color="#613e3a", width=40, height=20, corner_radius=20, command=lambda:resetsettings())
+        resetbutton.pack(pady=(0, 10))
+        dangerzoneframe.bind("<Button-1>", startmove)
+        dangerzoneframe.bind("<B1-Motion>", move)
+        dangerzoneframelabel.bind("<Button-1>", startmove)
+        dangerzoneframelabel.bind("<B1-Motion>", move)
+        
+        applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
         applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
-        cancelbutton = ctk.CTkButton(overlayframesb, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=buttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
+        cancelbutton = ctk.CTkButton(overlayframesb, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
         cancelbutton.place(relx=0.0, rely=1.0, x=12, y=-12, anchor="sw")
+        buttoncolor_TEMP = None
+        bttoncolor_hover_TEMP = None
         def resetsettings():
             confirmreset = messagebox.askyesno("Are you sure?", "Are you sure you want to reset your Packium appearance settings?")
             if confirmreset:
@@ -283,27 +329,78 @@ def mainui():
                 shutil.copyfile(defaultoptionspath, optionspath)
                 print("settings have been set to the default!")
                 messagebox.showinfo("Notice", "Settings have been set to the default!")
+                exitsb()
             else:
                 print("user changed their mind.")
-        def applysettings():
-            print("apply settings button pressed.")
+
         def cancelsettings():
             print("cancel settings button pressed.")
             exitsb()
         def pickbuttoncolor():
             print("button color button pressed.")
+            nonlocal buttoncolor_TEMP
             buttoncolor_pick = AskColor()
             buttoncolor_TEMP = buttoncolor_pick.get()
             if buttoncolor_TEMP :
                 print(f"selected color is {buttoncolor_TEMP}")
+                buttoncolorfield.configure(text=buttoncolor_TEMP)
                 buttoncolorfield.configure(fg_color=buttoncolor_TEMP)
         def pickbuttoncolorhover():
             print("button hover color button pressed.")
+            nonlocal bttoncolor_hover_TEMP
             buttoncolorhover_pick = AskColor()
-            buttoncolor_hover_TEMP = buttoncolorhover_pick.get()
-            if buttoncolor_hover_TEMP :
-                print(f"selected color is {buttoncolor_hover_TEMP}")
-                buttoncolorfield.configure(fg_color=buttoncolor_hover_TEMP)
+            bttoncolor_hover_TEMP = buttoncolorhover_pick.get()
+            if bttoncolor_hover_TEMP :
+                print(f"selected color is {bttoncolor_hover_TEMP}")
+                buttonhovercolorfield.configure(text=bttoncolor_hover_TEMP)
+                buttonhovercolorfield.configure(fg_color=bttoncolor_hover_TEMP)
+        def applysettings():
+            buttoncolorchanged = None
+            buttonhovercolorchanged = None
+            print("apply settings button pressed.")
+            nonlocal buttoncolor_TEMP
+            nonlocal bttoncolor_hover_TEMP
+            print(f"button color value in settings is: {buttoncolor_TEMP}")
+            if buttoncolor_TEMP is not None:
+                buttoncolorchanged = True
+                print("user changed the color of the buttons, applying that.")
+            if buttoncolor_TEMP is None:
+                buttoncolorchanged = False
+                print("user has not changed the color of the buttons.")
+            if bttoncolor_hover_TEMP is not None:
+                buttonhovercolorchanged = True
+                print("user changed the hover color of the buttons, applying that")
+            if bttoncolor_hover_TEMP is None:
+                buttonhovercolorchanged = False
+                print("user has not changed the hvoer color of the buttons.")
+            with open(optionspath, "r", encoding="utf-8") as optionsfilereads:
+                olines = optionsfilereads.readlines()
+            with open(optionspath, "w", encoding="utf-8") as optionsfilewrite:
+                 for line in olines:
+                    line.strip()
+                    print(line)
+                    if line.startswith("bttoncolor_hover"):
+                        if buttonhovercolorchanged == True:
+                            optionsfilewrite.write(f'bttoncolor_hover = "{bttoncolor_hover_TEMP}"\n')
+                            print("wrote it (bttoncolor_hover)")
+                        elif buttonhovercolorchanged == False or buttonhovercolorchanged == None:
+                            optionsfilewrite.write(line)
+                    elif line.startswith("buttoncolor"):
+                        if buttoncolorchanged == True:
+                            optionsfilewrite.write(f'buttoncolor = "{buttoncolor_TEMP}"\n')
+                            print("wrote it (bttoncolor_hover)")
+                        elif buttoncolorchanged == False or buttoncolorchanged == None:
+                            optionsfilewrite.write(line)
+                    else:
+                        optionsfilewrite.write(line)
+            if buttoncolorchanged == True or buttonhovercolorchanged == True:
+                messagebox.showinfo("Notice", "To see the changes, you have to restart the program.")
+            print("settings applied.")
+            exitsb()
+
+                
+                
+                
     def startmove(event):
         app.x = event.x
         app.y = event.y
@@ -329,7 +426,7 @@ def mainui():
         updateiconimg = replacementicon512
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/update.png.")
     updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(sizeidxb, sizeidxb))
-    updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:updatebutton_pressed())
+    updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
 
     downloadicon_path = resourcesdir / "download.png"
@@ -339,7 +436,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/download.png.")
         downloadiconimg = replacementicon512
     downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(sizeidxb, sizeidxb))
-    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
     downloadbutton.grid(row=0, column=1, padx=10, pady=10)
         
         
@@ -350,7 +447,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/uninstall.png.")
         uninstalliconimg = replacementicon512
     uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(sizeidxb, sizeidxb))
-    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
     uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
     
     
@@ -365,7 +462,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/discord.png.")
         discordiconimg = replacementicon512
     discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(sizeidxb, sizeidxb))
-    discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:discordbuttonclicked())
+    discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:discordbuttonclicked())
     discordbutton.grid(row=1, column=1, padx=10, pady=10)
     
     
@@ -377,7 +474,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/settings.png.")
         settingsiconimg = replacementicon512
     settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(sizeidxb, sizeidxb))
-    settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover, command=lambda:settingsbuttonpressed())
+    settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:settingsbuttonpressed())
     settingsbutton.grid(row=1, column=0, padx=10, pady=10)
     abouticon_path = resourcesdir / "about.png"
     try:
@@ -386,7 +483,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/about.png")
         abouticonimg = replacementicon512
     abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(sizeidxb, sizeidxb))
-    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=buttoncolor_hover)
+    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
     aboutbutton.grid(row=1, column=2, padx=10, pady=10)
     
     
