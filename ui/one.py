@@ -51,6 +51,7 @@ def mainui():
                 exec(line, context)
     buttoncolor = context.get("buttoncolor")
     bttoncolor_hover = context.get("bttoncolor_hover")
+    iconpack = context.get("iconpack")
     replacementicon_color = context.get("replacementicon_color")
     replacementicon512 = context.get("replacementicon512")
     replacementiconapp = context.get("replacementiconapp")
@@ -63,6 +64,7 @@ def mainui():
     
     print(f"button color: {buttoncolor}") #color of the buttons
     print(f"hover button color: {bttoncolor_hover}") #color of the button when hovered over
+    print(f"icon pack set that Packium is using: {iconpack}") 
     print(f"replacement icon color: {replacementicon_color}")#color of the replacement icons
     print(f"replacement icon 512x512 for the buttons: {replacementicon512}") #replacement icon for buttons.
     print(f"replacement icon for the program: {replacementiconapp}") #the replacement icon of the app itself
@@ -226,7 +228,7 @@ def mainui():
         settings_popup = ctk.CTkToplevel(app)
         settings_popup.overrideredirect(True)
         settings_popup.title("Settings")
-        settings_popup.geometry("400x400")
+        settings_popup.geometry("400x500")
         settings_popup.attributes("-topmost", True)
         transparent_color = "#000001"
         settings_popup.attributes("-alpha", wopacity)
@@ -272,7 +274,10 @@ def mainui():
         settingslabel.pack()
         settingslabel.bind("<Button-1>", startmove)
         settingslabel.bind("<B1-Motion>", move)
-
+        
+        overlayframesbscrollable = ctk.CTkScrollableFrame(settings_popup, corner_radius=25)
+        
+        
         generalfieldframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
         generalfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         generalfieldframelabel = ctk.CTkLabel(generalfieldframe, text="General settings", font=("Arial", 16, "bold"), text_color="white")
@@ -283,6 +288,12 @@ def mainui():
         appthemefield = ctk.CTkOptionMenu(generalfieldframe, values=appthemeoptions, dynamic_resizing=False, fg_color=buttoncolor, corner_radius=20)
         appthemefield.set(appearancemode)
         appthemefield.pack(anchor="w", padx=10, pady=(0, 10))
+        iconpackfieldlabel = ctk.CTkLabel(generalfieldframe, text="The icon pack that Packium uses:", font=("Arial", 16), text_color="white")
+        iconpackfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
+        iconpackoptions = ["Light", "Dark"]
+        iconpackfield = ctk.CTkOptionMenu(generalfieldframe, values=iconpackoptions, dynamic_resizing=False, fg_color=buttoncolor, corner_radius=20)
+        iconpackfield.set(iconpack)
+        iconpackfield.pack(anchor="w", padx=10, pady=(0, 10))
         generalfieldframe.bind("<Button-1>", startmove)
         generalfieldframe.bind("<B1-Motion>", move)
         generalfieldframelabel.bind("<Button-1>", startmove)
@@ -373,14 +384,21 @@ def mainui():
         def applysettings():
             buttoncolorchanged = None
             buttonhovercolorchanged = None
+            themechanged = None
+            iconpackchanged = None
             print("apply settings button pressed.")
             appearancemode_TEMP = appthemefield.get()
             print(appearancemode_TEMP)
-            themechanged = None
+
             if appearancemode != appearancemode_TEMP:
                 themechanged = True
             else:
                 themechanged = False
+            iconpack_TEMP = iconpackfield.get()
+            if iconpack != iconpack_TEMP:
+                iconpackchanged = True
+            else:
+                iconpackchanged = False
             nonlocal buttoncolor_TEMP
             nonlocal bttoncolor_hover_TEMP
             print(f"button color value in settings is: {buttoncolor_TEMP}")
@@ -400,7 +418,6 @@ def mainui():
                 olines = optionsfilereads.readlines()
             with open(optionspath, "w", encoding="utf-8") as optionsfilewrite:
                  for line in olines:
-                    line.strip()
                     print(line)
                     if line.startswith("bttoncolor_hover"):
                         if buttonhovercolorchanged == True:
@@ -418,11 +435,17 @@ def mainui():
                         if themechanged == True:
                             optionsfilewrite.write(f'appearancemode = "{appearancemode_TEMP}"\n')
                             print("wrote it (appearancemode/theme)")
-                        if themechanged == False or themechanged == None:
+                        elif themechanged == False or themechanged == None:
+                            optionsfilewrite.write(line)
+                    elif line.startswith("iconpack"):
+                        if iconpackchanged == True:
+                            optionsfilewrite.write(f'iconpack = "{iconpack_TEMP}"\n')
+                            print("wrote it (iconpack)")
+                        elif iconpackchanged == False or iconpackchanged == None:
                             optionsfilewrite.write(line)
                     else:
                         optionsfilewrite.write(line)
-            if buttoncolorchanged == True or buttonhovercolorchanged == True or themechanged == True:
+            if buttoncolorchanged == True or buttonhovercolorchanged == True or themechanged == True or iconpackchanged == True:
                 messagebox.showinfo("Notice", "To see the changes, you have to restart the program.")
             print("settings applied.")
             exitsb()
@@ -447,22 +470,38 @@ def mainui():
     optionsframe.bind("<B1-Motion>", move)
     
     #buttons
+    packiumiconpackvalueisfucked = None
+    updateicon_path_dark = resourcesdir / "updatedark.png"
     updateicon_path = resourcesdir / "update.png"
     print(updateicon_path)
+    print(updateicon_path_dark)
     try:
-        updateiconimg = Image.open(updateicon_path)
+        if iconpack == "Light":
+            updateiconimg = Image.open(updateicon_path)
+        elif iconpack == "Dark":
+            updateiconimg = Image.open(updateicon_path_dark)
+        else:
+            updateiconimg = replacementicon512
+            packiumiconpackvalueisfucked = True
     except FileNotFoundError:
         updateiconimg = replacementicon512
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/update.png.")
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the update icon (aka /resources/update.png or /resources/updatedark.png).")
     updateicon = ctk.CTkImage(light_image=updateiconimg, dark_image=updateiconimg, size=(sizeidxb, sizeidxb))
     updatebutton = ctk.CTkButton(optionsframe, text="", image=updateicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:updatebutton_pressed())
     updatebutton.grid(row=0, column=0, padx=10, pady=10)
 
     downloadicon_path = resourcesdir / "download.png"
+    downloadicon_path_dark = resourcesdir / "downloaddark.png"
     try:
-        downloadiconimg = Image.open(downloadicon_path)
+        if iconpack == "Light":
+            downloadiconimg = Image.open(downloadicon_path)
+        elif iconpack == "Dark":
+            downloadiconimg = Image.open(downloadicon_path_dark)
+        else:
+            downloadiconimg = replacementicon512
+            packiumiconpackvalueisfucked = True
     except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/download.png.")
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the download icon (aka /resources/download.png or /resources/downloaddark.png).")
         downloadiconimg = replacementicon512
     downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(sizeidxb, sizeidxb))
     downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
@@ -470,10 +509,17 @@ def mainui():
         
         
     uninstallicon_path = resourcesdir / "uninstall.png"
+    uninstallicon_path_dark = resourcesdir / "uninstalldark.png"
     try:
-        uninstalliconimg = Image.open(uninstallicon_path)
+        if iconpack == "Light":
+            uninstalliconimg = Image.open(uninstallicon_path)
+        elif iconpack == "Dark":
+            uninstalliconimg = Image.open(uninstallicon_path_dark)
+        else:
+            uninstalliconimg = replacementicon512
+            packiumiconpackvalueisfucked = True
     except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/uninstall.png.")
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the uninstall icon (aka /resources/uninstall.png or /resources/uninstalldark.png).")
         uninstalliconimg = replacementicon512
     uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(sizeidxb, sizeidxb))
     uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
@@ -485,10 +531,17 @@ def mainui():
         discordinvite()
         print("discord invite")
     discordicon_path = resourcesdir / "discord.png"
+    discordicon_path_dark = resourcesdir / "discorddark.png"
     try:
-        discordiconimg = Image.open(discordicon_path)
+        if iconpack == "Light":
+            discordiconimg = Image.open(discordicon_path)
+        elif iconpack == "Dark":
+            discordiconimg = Image.open(discordicon_path_dark)
+        else:
+            discordiconimg = replacementicon512
+            packiumiconpackvalueisfucked = True
     except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/discord.png.")
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the discord icon (aka /resources/discord.png or /resources/discorddark.png).")
         discordiconimg = replacementicon512
     discordicon = ctk.CTkImage(light_image=discordiconimg, dark_image=discordiconimg, size=(sizeidxb, sizeidxb))
     discordbutton = ctk.CTkButton(optionsframe, text="", image=discordicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:discordbuttonclicked())
@@ -497,25 +550,42 @@ def mainui():
     
     
     settingsicon_path = resourcesdir / "settings.png"
+    settingsicon_path_dark = resourcesdir / "settingsdark.png"
     try:
-        settingsiconimg = Image.open(settingsicon_path)
+        if iconpack == "Light":
+            settingsiconimg = Image.open(settingsicon_path)
+        elif iconpack == "Dark":
+            settingsiconimg = Image.open(settingsicon_path_dark)
+        else:
+            settingsiconimg = replacementicon512
+            packiumiconpackvalueisfucked = True
     except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/settings.png.")
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the settings icon (aka /resources/settings.png or /resources/settingsdark.png).")
         settingsiconimg = replacementicon512
     settingsicon = ctk.CTkImage(light_image=settingsiconimg, dark_image=settingsiconimg, size=(sizeidxb, sizeidxb))
     settingsbutton = ctk.CTkButton(optionsframe, text="", image=settingsicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:settingsbuttonpressed())
     settingsbutton.grid(row=1, column=0, padx=10, pady=10)
+    
     abouticon_path = resourcesdir / "about.png"
+    abouticon_path_dark = resourcesdir / "aboutdark.png"
     try:
-        abouticonimg = Image.open(abouticon_path)
+        if iconpack == "Light":
+            abouticonimg = Image.open(abouticon_path)
+        elif iconpack == "Dark":
+            abouticonimg = Image.open(abouticon_path_dark)
+        else:
+            abouticonimg = replacementicon512
+            packiumiconpackvalueisfucked = True
     except FileNotFoundError:
-        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find /resources/about.png")
+        messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the about icon (aka /resources/about.png or /resources/aboutdark.png).")
         abouticonimg = replacementicon512
     abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(sizeidxb, sizeidxb))
     aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
     aboutbutton.grid(row=1, column=2, padx=10, pady=10)
-    
-    
+    if packiumiconpackvalueisfucked == True:
+        messagebox.showerror("Error!", 'Packium could not read the iconpack value in /ui/options.packium. You can manually edit the options file to iconpack = "Dark" or iconpack = "Light" to fix this, or just reset your appearance settings.')
+    else:
+        pass
     #hoverfuncs
     timerid = None
     currentsize = sizeidxb 

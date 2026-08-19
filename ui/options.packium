@@ -1,11 +1,12 @@
 buttoncolor = "#3b3b3b"
 bttoncolor_hover = "#787878"
+iconpack = "Light"
 replacementicon_color = "#3b3b3b"
 replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color)
 replacementiconapp = Image.new("RGB", (32, 32), color=replacementicon_color)
 sizeidxb = 40
 sizeidxbh = 44
 maingeometry = "300x200"
-appearancemode = "System"
+appearancemode = "Dark"
 defaultcolortheme = "dark-blue"
 wopacity = 0.7
