@@ -52,6 +52,7 @@ def mainui():
     buttoncolor = context.get("buttoncolor")
     bttoncolor_hover = context.get("bttoncolor_hover")
     iconpack = context.get("iconpack")
+    textcolor = context.get("textcolor")
     replacementicon_color = context.get("replacementicon_color")
     replacementicon512 = context.get("replacementicon512")
     replacementiconapp = context.get("replacementiconapp")
@@ -64,7 +65,8 @@ def mainui():
     
     print(f"button color: {buttoncolor}") #color of the buttons
     print(f"hover button color: {bttoncolor_hover}") #color of the button when hovered over
-    print(f"icon pack set that Packium is using: {iconpack}") 
+    print(f"icon pack set that Packium is using: {iconpack}")
+    print(f"color of text: {textcolor}")
     print(f"replacement icon color: {replacementicon_color}")#color of the replacement icons
     print(f"replacement icon 512x512 for the buttons: {replacementicon512}") #replacement icon for buttons.
     print(f"replacement icon for the program: {replacementiconapp}") #the replacement icon of the app itself
@@ -119,7 +121,7 @@ def mainui():
     overlayframe.pack(fill="both", expand=True, padx=2, pady=2)
     close = ctk.CTkButton(overlayframe, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:FUCKMYLIFE())
     close.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
-    name = ctk.CTkLabel(overlayframe, text="Packium", fg_color="transparent", font=("Arial", 16, "bold"), text_color="white")
+    name = ctk.CTkLabel(overlayframe, text="Packium", fg_color="transparent", font=("Arial", 16, "bold"), text_color=textcolor)
     name.pack(side="top", pady=(2, 0))
     optionsframe = ctk.CTkFrame(overlayframe, corner_radius=25, fg_color="transparent")
     optionsframe.pack()
@@ -179,7 +181,7 @@ def mainui():
                 overlayframeup.bind("<B1-Motion>", move)
                 closeup = ctk.CTkButton(overlayframeup, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitup())
                 closeup.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
-                avail = ctk.CTkLabel(overlayframeup, text="Available updates", font=("Arial", 16, "bold"), text_color="white")
+                avail = ctk.CTkLabel(overlayframeup, text="Available updates", font=("Arial", 16, "bold"), text_color=textcolor)
                 avail.pack(pady=2)
                 avail.bind("<Button-1>", startmove)
                 avail.bind("<B1-Motion>", move)
@@ -189,7 +191,7 @@ def mainui():
                 list_frame.bind("<B1-Motion>", move)
                 checkboxes = {}
                 for name in names:
-                    item = ctk.CTkCheckBox(list_frame, text=name, font=("Arial", 12, "bold"), checkbox_width=20, checkbox_height=20, corner_radius=6)
+                    item = ctk.CTkCheckBox(list_frame, text=name, font=("Arial", 12, "bold"), text_color=textcolor, checkbox_width=20, checkbox_height=20, corner_radius=6)
                     item.pack(padx=10, pady=5, fill="x", anchor="w")
                     checkboxes[name] = item
                 def getchecked():
@@ -220,7 +222,7 @@ def mainui():
                             app.after(0, lambda: afterrunupdatethread())
                         threading.Thread(target=runupdatethread, daemon=True).start()
                         
-                continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
+                continuebuttonup = ctk.CTkButton(overlayframeup, text="Continue", font=("Arial", 14, "bold"), text_color=textcolor, fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
                 continuebuttonup.pack(pady=10)
     def settingsbuttonpressed():
         print("settings button pressed.")
@@ -270,7 +272,7 @@ def mainui():
         overlayframesb.bind("<B1-Motion>", move)
         closesb = ctk.CTkButton(overlayframesb, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitsb())
         closesb.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
-        settingslabel = ctk.CTkLabel(overlayframesb, text="Settings", font=("Arial", 16, "bold"), text_color="white")
+        settingslabel = ctk.CTkLabel(overlayframesb, text="Settings", font=("Arial", 16, "bold"), text_color=textcolor)
         settingslabel.pack()
         settingslabel.bind("<Button-1>", startmove)
         settingslabel.bind("<B1-Motion>", move)
@@ -280,20 +282,24 @@ def mainui():
         
         generalfieldframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
         generalfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
-        generalfieldframelabel = ctk.CTkLabel(generalfieldframe, text="General settings", font=("Arial", 16, "bold"), text_color="white")
+        generalfieldframelabel = ctk.CTkLabel(generalfieldframe, text="General settings", font=("Arial", 16, "bold"), text_color=textcolor)
         generalfieldframelabel.pack()
-        appthemefieldlabel = ctk.CTkLabel(generalfieldframe, text="The theme of Packium:", font=("Arial", 16), text_color="white")
+        appthemefieldlabel = ctk.CTkLabel(generalfieldframe, text="The theme of Packium:", font=("Arial", 16), text_color=textcolor)
         appthemefieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
         appthemeoptions = ["Light", "Dark", "System"]
-        appthemefield = ctk.CTkOptionMenu(generalfieldframe, values=appthemeoptions, dynamic_resizing=False, fg_color=buttoncolor, corner_radius=20)
+        appthemefield = ctk.CTkOptionMenu(generalfieldframe, values=appthemeoptions, dynamic_resizing=False, text_color=textcolor, fg_color=buttoncolor, corner_radius=20)
         appthemefield.set(appearancemode)
         appthemefield.pack(anchor="w", padx=10, pady=(0, 10))
-        iconpackfieldlabel = ctk.CTkLabel(generalfieldframe, text="The icon pack that Packium uses:", font=("Arial", 16), text_color="white")
+        iconpackfieldlabel = ctk.CTkLabel(generalfieldframe, text="The icon pack that Packium uses:", font=("Arial", 16), text_color=textcolor)
         iconpackfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
         iconpackoptions = ["Light", "Dark"]
-        iconpackfield = ctk.CTkOptionMenu(generalfieldframe, values=iconpackoptions, dynamic_resizing=False, fg_color=buttoncolor, corner_radius=20)
+        iconpackfield = ctk.CTkOptionMenu(generalfieldframe, values=iconpackoptions, dynamic_resizing=False, fg_color=buttoncolor, corner_radius=20, text_color=textcolor)
         iconpackfield.set(iconpack)
         iconpackfield.pack(anchor="w", padx=10, pady=(0, 10))
+        textcolorfieldlabel = ctk.CTkLabel(generalfieldframe, text="The color of text in Packium:", font=("Arial", 16), text_color=textcolor)
+        textcolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
+        textcolorfield = ctk.CTkButton(generalfieldframe, text=textcolor, text_color=textcolor, font=("Arial", 16), fg_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:picktextcolor())
+        textcolorfield.pack(anchor="w", padx=10, pady=(0, 10))
         generalfieldframe.bind("<Button-1>", startmove)
         generalfieldframe.bind("<B1-Motion>", move)
         generalfieldframelabel.bind("<Button-1>", startmove)
@@ -305,16 +311,16 @@ def mainui():
 
         buttonfieldframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
         buttonfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
-        buttonfieldframelabel = ctk.CTkLabel(buttonfieldframe, text="Settings related to buttons", font=("Arial", 16, "bold"), text_color="white")
+        buttonfieldframelabel = ctk.CTkLabel(buttonfieldframe, text="Settings related to buttons", font=("Arial", 16, "bold"), text_color=textcolor)
         buttonfieldframelabel.pack()
-        buttoncolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons:", font=("Arial", 16), text_color="white")
+        buttoncolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons:", font=("Arial", 16), text_color=textcolor)
         buttoncolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
-        buttoncolorfield = ctk.CTkButton(buttonfieldframe, text=buttoncolor, font=("Arial", 16), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
+        buttoncolorfield = ctk.CTkButton(buttonfieldframe, text=buttoncolor, font=("Arial", 16), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
         buttoncolorfield.pack(anchor="w", padx=10, pady=(0, 10))
         
-        buttonhovercolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons when hovered over:", font=("Arial", 16), text_color="white")
+        buttonhovercolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons when hovered over:", font=("Arial", 16), text_color=textcolor)
         buttonhovercolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
-        buttonhovercolorfield = ctk.CTkButton(buttonfieldframe, text=bttoncolor_hover, font=("Arial", 16), fg_color=bttoncolor_hover, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolorhover())
+        buttonhovercolorfield = ctk.CTkButton(buttonfieldframe, text=bttoncolor_hover, font=("Arial", 16), fg_color=bttoncolor_hover, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolorhover())
         buttonhovercolorfield.pack(anchor="w", padx=10, pady=(0, 10))
         buttonfieldframe.bind("<Button-1>", startmove)
         buttonfieldframe.bind("<B1-Motion>", move)
@@ -328,9 +334,9 @@ def mainui():
         
         dangerzoneframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
         dangerzoneframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
-        dangerzoneframelabel = ctk.CTkLabel(dangerzoneframe, text="Danger zone", font=("Arial", 16, "bold"), text_color="white")
+        dangerzoneframelabel = ctk.CTkLabel(dangerzoneframe, text="Danger zone", font=("Arial", 16, "bold"), text_color=textcolor)
         dangerzoneframelabel.pack()
-        resetbutton = ctk.CTkButton(dangerzoneframe, text="set settings back to default", font=("Arial", 16), fg_color=buttoncolor, width=40, height=20, corner_radius=20, command=lambda:resetsettings())
+        resetbutton = ctk.CTkButton(dangerzoneframe, text="set settings back to default", font=("Arial", 16), fg_color=buttoncolor, text_color=textcolor, width=40, height=20, corner_radius=20, command=lambda:resetsettings())
         resetbutton.pack(pady=(0, 10))
         dangerzoneframe.bind("<Button-1>", startmove)
         dangerzoneframe.bind("<B1-Motion>", move)
@@ -343,12 +349,13 @@ def mainui():
         resetbutton.bind("<Enter>", enterdangerzoneresetbutton)
         resetbutton.bind("<Leave>", leavedangerzoneresetbutton)
         
-        applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
+        applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
         applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
-        cancelbutton = ctk.CTkButton(overlayframesb, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
+        cancelbutton = ctk.CTkButton(overlayframesb, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
         cancelbutton.place(relx=0.0, rely=1.0, x=12, y=-12, anchor="sw")
         buttoncolor_TEMP = None
         bttoncolor_hover_TEMP = None
+        textcolor_TEMP = None
         def resetsettings():
             confirmreset = messagebox.askyesno("Are you sure?", "Are you sure you want to reset your Packium appearance settings?")
             if confirmreset:
@@ -381,11 +388,21 @@ def mainui():
                 print(f"selected color is {bttoncolor_hover_TEMP}")
                 buttonhovercolorfield.configure(text=bttoncolor_hover_TEMP)
                 buttonhovercolorfield.configure(fg_color=bttoncolor_hover_TEMP)
+        def picktextcolor():
+            print("text color button pressed.")
+            nonlocal textcolor_TEMP
+            textcolor_pick = AskColor()
+            textcolor_TEMP = textcolor_pick.get()
+            if textcolor_TEMP:
+                print(f"selected color is {textcolor_TEMP}")
+                textcolorfield.configure(text=textcolor_TEMP)
+                textcolorfield.configure(fg_color = textcolor_TEMP)
         def applysettings():
             buttoncolorchanged = None
             buttonhovercolorchanged = None
             themechanged = None
             iconpackchanged = None
+            textcolorchanged = None
             print("apply settings button pressed.")
             appearancemode_TEMP = appthemefield.get()
             print(appearancemode_TEMP)
@@ -413,7 +430,13 @@ def mainui():
                 print("user changed the hover color of the buttons, applying that")
             if bttoncolor_hover_TEMP is None:
                 buttonhovercolorchanged = False
-                print("user has not changed the hvoer color of the buttons.")
+                print("user has not changed the hover color of the buttons.")
+            if textcolor_TEMP is not None:
+                textcolorchanged = True
+                print("user has changed the color of text, applying that.")
+            if textcolor_TEMP is None:
+                textcolorchanged = False
+                print("user has not changed the color of text.")
             with open(optionspath, "r", encoding="utf-8") as optionsfilereads:
                 olines = optionsfilereads.readlines()
             with open(optionspath, "w", encoding="utf-8") as optionsfilewrite:
@@ -443,9 +466,15 @@ def mainui():
                             print("wrote it (iconpack)")
                         elif iconpackchanged == False or iconpackchanged == None:
                             optionsfilewrite.write(line)
+                    elif line.startswith("textcolor"):
+                        if textcolorchanged == True:
+                            optionsfilewrite.write(f'textcolor = "{textcolor_TEMP}"\n')
+                            print("wrote it (textcolor)")
+                        else:
+                            optionsfilewrite.write(line)
                     else:
                         optionsfilewrite.write(line)
-            if buttoncolorchanged == True or buttonhovercolorchanged == True or themechanged == True or iconpackchanged == True:
+            if buttoncolorchanged == True or buttonhovercolorchanged == True or themechanged == True or iconpackchanged == True or textcolorchanged == True:
                 messagebox.showinfo("Notice", "To see the changes, you have to restart the program.")
             print("settings applied.")
             exitsb()
