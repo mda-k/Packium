@@ -277,10 +277,10 @@ def mainui():
         settingslabel.bind("<Button-1>", startmove)
         settingslabel.bind("<B1-Motion>", move)
         
-        overlayframesbscrollable = ctk.CTkScrollableFrame(settings_popup, corner_radius=25)
+        overlayframesbscrollable = ctk.CTkScrollableFrame(overlayframesb, corner_radius=25)
+        overlayframesbscrollable.pack(fill="both", expand=True)
         
-        
-        generalfieldframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
+        generalfieldframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color="#191919")
         generalfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         generalfieldframelabel = ctk.CTkLabel(generalfieldframe, text="General settings", font=("Arial", 16, "bold"), text_color=textcolor)
         generalfieldframelabel.pack()
@@ -309,14 +309,14 @@ def mainui():
 
 
 
-        buttonfieldframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
+        buttonfieldframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color="#191919")
         buttonfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         buttonfieldframelabel = ctk.CTkLabel(buttonfieldframe, text="Settings related to buttons", font=("Arial", 16, "bold"), text_color=textcolor)
         buttonfieldframelabel.pack()
         buttoncolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons:", font=("Arial", 16), text_color=textcolor)
         buttoncolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
         buttoncolorfield = ctk.CTkButton(buttonfieldframe, text=buttoncolor, font=("Arial", 16), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:pickbuttoncolor())
-        buttoncolorfield.pack(anchor="w", padx=10, pady=(0, 10))
+        buttoncolorfield.pack(anchor="w", padx=10, pady=(0, 0))
         
         buttonhovercolorfieldlabel = ctk.CTkLabel(buttonfieldframe, text="Color of the buttons when hovered over:", font=("Arial", 16), text_color=textcolor)
         buttonhovercolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
@@ -332,7 +332,7 @@ def mainui():
         buttonhovercolorfieldlabel.bind("<B1-Motion>", move)
         
         
-        dangerzoneframe = ctk.CTkFrame(overlayframesb, corner_radius=10, fg_color="#191919")
+        dangerzoneframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color="#191919")
         dangerzoneframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         dangerzoneframelabel = ctk.CTkLabel(dangerzoneframe, text="Danger zone", font=("Arial", 16, "bold"), text_color=textcolor)
         dangerzoneframelabel.pack()
@@ -349,9 +349,11 @@ def mainui():
         resetbutton.bind("<Enter>", enterdangerzoneresetbutton)
         resetbutton.bind("<Leave>", leavedangerzoneresetbutton)
         
-        applybutton = ctk.CTkButton(overlayframesb, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
+        buttonsframething = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, height=46)
+        buttonsframething.pack(fill="x", expand=False, pady=(0, 0), padx=0)
+        applybutton = ctk.CTkButton(buttonsframething, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
         applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
-        cancelbutton = ctk.CTkButton(overlayframesb, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
+        cancelbutton = ctk.CTkButton(buttonsframething, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
         cancelbutton.place(relx=0.0, rely=1.0, x=12, y=-12, anchor="sw")
         buttoncolor_TEMP = None
         bttoncolor_hover_TEMP = None
