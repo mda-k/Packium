@@ -11,3 +11,4 @@ maingeometry = "300x200"
 appearancemode = "Dark"
 defaultcolortheme = "dark-blue"
 wopacity = 0.7
+sectionfgcolor = "#191919"

@@ -62,6 +62,7 @@ def mainui():
     appearancemode = context.get("appearancemode")
     defaultcolortheme = context.get("defaultcolortheme")
     wopacity = context.get("wopacity")
+    sectionfgcolor = context.get("sectionfgcolor")
     
     print(f"button color: {buttoncolor}") #color of the buttons
     print(f"hover button color: {bttoncolor_hover}") #color of the button when hovered over
@@ -76,7 +77,7 @@ def mainui():
     print(f"appearance mode is: {appearancemode}") #theme, light or dark, blah blah
     print(f"default color theme is: {defaultcolortheme}") #color theme
     print(f"opacity of the program is: {wopacity}") #opacity of the windows
-    
+    print(f"color of sections: {sectionfgcolor}") #color of the sections
     
     app = ctk.CTk()
     app.geometry(maingeometry)
@@ -279,8 +280,11 @@ def mainui():
         
         overlayframesbscrollable = ctk.CTkScrollableFrame(overlayframesb, corner_radius=25)
         overlayframesbscrollable.pack(fill="both", expand=True)
+        overlayframesbscrollable.bind("<Button-1>", startmove)
+        overlayframesbscrollable.bind("<B1-Motion>", move)
         
-        generalfieldframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color="#191919")
+        
+        generalfieldframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color=sectionfgcolor)
         generalfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         generalfieldframelabel = ctk.CTkLabel(generalfieldframe, text="General settings", font=("Arial", 16, "bold"), text_color=textcolor)
         generalfieldframelabel.pack()
@@ -309,7 +313,7 @@ def mainui():
 
 
 
-        buttonfieldframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color="#191919")
+        buttonfieldframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color=sectionfgcolor)
         buttonfieldframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         buttonfieldframelabel = ctk.CTkLabel(buttonfieldframe, text="Settings related to buttons", font=("Arial", 16, "bold"), text_color=textcolor)
         buttonfieldframelabel.pack()
@@ -332,7 +336,7 @@ def mainui():
         buttonhovercolorfieldlabel.bind("<B1-Motion>", move)
         
         
-        dangerzoneframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color="#191919")
+        dangerzoneframe = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, fg_color=sectionfgcolor)
         dangerzoneframe.pack(fill="x", expand=False, pady=(0, 10), padx=20)
         dangerzoneframelabel = ctk.CTkLabel(dangerzoneframe, text="Danger zone", font=("Arial", 16, "bold"), text_color=textcolor)
         dangerzoneframelabel.pack()
@@ -349,8 +353,10 @@ def mainui():
         resetbutton.bind("<Enter>", enterdangerzoneresetbutton)
         resetbutton.bind("<Leave>", leavedangerzoneresetbutton)
         
-        buttonsframething = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, height=46)
+        buttonsframething = ctk.CTkFrame(overlayframesbscrollable, corner_radius=10, height=48, fg_color=sectionfgcolor)
         buttonsframething.pack(fill="x", expand=False, pady=(0, 0), padx=0)
+        buttonsframething.bind("<Button-1>", startmove)
+        buttonsframething.bind("<B1-Motion>", move)
         applybutton = ctk.CTkButton(buttonsframething, text="Apply", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:applysettings())
         applybutton.place(relx=1.0, rely=1.0, x=-12, y=-12, anchor="se")
         cancelbutton = ctk.CTkButton(buttonsframething, text="Cancel", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:cancelsettings())
