@@ -294,6 +294,18 @@ def mainui():
         appthemefield = ctk.CTkOptionMenu(generalfieldframe, values=appthemeoptions, dynamic_resizing=False, text_color=textcolor, fg_color=buttoncolor, corner_radius=20)
         appthemefield.set(appearancemode)
         appthemefield.pack(anchor="w", padx=10, pady=(0, 10))
+        appcolorsetfieldlabel = ctk.CTkLabel(generalfieldframe, text="The colorset that Packium uses:", font=("Arial", 16), text_color=textcolor)
+        appcolorsetfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
+        appcolorsetoptions = ["Blue", "Dark blue", "Green"]
+
+        appcolorsetfield = ctk.CTkOptionMenu(generalfieldframe, values=appcolorsetoptions, dynamic_resizing=False, text_color=textcolor, fg_color=buttoncolor, corner_radius=20)
+        appcolorsetfield.pack(anchor="w", padx=10, pady=(0, 10))
+        if defaultcolortheme is "blue":
+            appcolorsetfield.set("Blue")
+        if defaultcolortheme is "dark-blue":
+            appcolorsetfield.set("Dark blue")
+        if defaultcolortheme is "green":
+            appcolorsetfield.set("Green")
         iconpackfieldlabel = ctk.CTkLabel(generalfieldframe, text="The icon pack that Packium uses:", font=("Arial", 16), text_color=textcolor)
         iconpackfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
         iconpackoptions = ["Light", "Dark"]
@@ -310,6 +322,10 @@ def mainui():
         generalfieldframelabel.bind("<B1-Motion>", move)
         appthemefieldlabel.bind("<Button-1>", startmove)
         appthemefieldlabel.bind("<B1-Motion>", move)
+        appcolorsetfieldlabel.bind("<Button-1>", startmove)
+        appcolorsetfieldlabel.bind("<B1-Motion>", move)
+        appcolorsetfield.bind("<Button-1>", startmove)
+        appcolorsetfield.bind("<B1-Motion>", move)
 
 
 
@@ -414,11 +430,21 @@ def mainui():
             print("apply settings button pressed.")
             appearancemode_TEMP = appthemefield.get()
             print(appearancemode_TEMP)
-
+            defaultcolortheme_TEMP = appcolorsetfield.get()
             if appearancemode != appearancemode_TEMP:
                 themechanged = True
             else:
                 themechanged = False
+            if defaultcolortheme != defaultcolortheme_TEMP:
+                colorsetchanged = True
+            else:
+                colorsetchanged = False
+            if defaultcolortheme_TEMP == "Blue":
+                defaultcolortheme_TEMP = "blue"
+            if defaultcolortheme_TEMP == "Dark blue":
+                defaultcolortheme_TEMP = "dark-blue"
+            if defaultcolortheme_TEMP == "Green":
+                defaultcolortheme_TEMP = "green"
             iconpack_TEMP = iconpackfield.get()
             if iconpack != iconpack_TEMP:
                 iconpackchanged = True
@@ -467,6 +493,12 @@ def mainui():
                             optionsfilewrite.write(f'appearancemode = "{appearancemode_TEMP}"\n')
                             print("wrote it (appearancemode/theme)")
                         elif themechanged == False or themechanged == None:
+                            optionsfilewrite.write(line)
+                    elif line.startswith("defaultcolortheme"):
+                        if colorsetchanged == True:
+                            optionsfilewrite.write(f'defaultcolortheme = "{defaultcolortheme_TEMP}"\n')
+                            print ("wrote it (appcolorset)")
+                        elif colorsetchanged == False or colorsetchanged == None:
                             optionsfilewrite.write(line)
                     elif line.startswith("iconpack"):
                         if iconpackchanged == True:
