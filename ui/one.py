@@ -296,14 +296,11 @@ def mainui():
         appthemefield.pack(anchor="w", padx=10, pady=(0, 10))
         appcolorsetfieldlabel = ctk.CTkLabel(generalfieldframe, text="The colorset that Packium uses:", font=("Arial", 16), text_color=textcolor)
         appcolorsetfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
-        appcolorsetoptions = ["Blue", "Dark blue", "Green"]
-
+        appcolorsetoptions = ["Blue", "Green"]
         appcolorsetfield = ctk.CTkOptionMenu(generalfieldframe, values=appcolorsetoptions, dynamic_resizing=False, text_color=textcolor, fg_color=buttoncolor, corner_radius=20)
         appcolorsetfield.pack(anchor="w", padx=10, pady=(0, 10))
-        if defaultcolortheme is "blue":
-            appcolorsetfield.set("Blue")
         if defaultcolortheme is "dark-blue":
-            appcolorsetfield.set("Dark blue")
+            appcolorsetfield.set("Blue")
         if defaultcolortheme is "green":
             appcolorsetfield.set("Green")
         iconpackfieldlabel = ctk.CTkLabel(generalfieldframe, text="The icon pack that Packium uses:", font=("Arial", 16), text_color=textcolor)
@@ -441,10 +438,10 @@ def mainui():
                 colorsetchanged = False
             if defaultcolortheme_TEMP == "Blue":
                 defaultcolortheme_TEMP = "blue"
-            if defaultcolortheme_TEMP == "Dark blue":
-                defaultcolortheme_TEMP = "dark-blue"
             if defaultcolortheme_TEMP == "Green":
                 defaultcolortheme_TEMP = "green"
+            else:
+                defaultcolortheme_TEMP = "dark-blue"
             iconpack_TEMP = iconpackfield.get()
             if iconpack != iconpack_TEMP:
                 iconpackchanged = True

@@ -9,6 +9,6 @@ sizeidxb = 40
 sizeidxbh = 44
 maingeometry = "300x200"
 appearancemode = "Dark"
-defaultcolortheme = "dark-blue"
+defaultcolortheme = "green"
 wopacity = 1
 sectionfgcolor = "#191919"
