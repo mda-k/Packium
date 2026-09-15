@@ -186,7 +186,7 @@ def mainui():
                 avail.pack(pady=2)
                 avail.bind("<Button-1>", startmove)
                 avail.bind("<B1-Motion>", move)
-                list_frame = ctk.CTkScrollableFrame(overlayframeup, fg_color="transparent", corner_radius=25)
+                list_frame = ctk.CTkScrollableFrame(overlayframeup, fg_color=sectionfgcolor, corner_radius=25)
                 list_frame.pack(padx=8, pady=0, fill="both", expand=True)
                 list_frame.bind("<Button-1>", startmove)
                 list_frame.bind("<B1-Motion>", move)
@@ -440,6 +440,7 @@ def mainui():
             themechanged = None
             iconpackchanged = None
             textcolorchanged = None
+            sectioncolorchanged = None
             print("apply settings button pressed.")
             appearancemode_TEMP = appthemefield.get()
             print(appearancemode_TEMP)
@@ -452,6 +453,10 @@ def mainui():
                 colorsetchanged = True
             else:
                 colorsetchanged = False
+            if sectionfgcolor != sectioncolor_TEMP:
+                sectioncolorchanged = True
+            else:
+                sectioncolorchanged = False 
             if defaultcolortheme_TEMP == "Blue":
                 defaultcolortheme_TEMP = "blue"
             if defaultcolortheme_TEMP == "Green":
@@ -484,6 +489,8 @@ def mainui():
             if textcolor_TEMP is None:
                 textcolorchanged = False
                 print("user has not changed the color of text.")
+            if sectioncolor_TEMP is not None:
+                print("user has changed section color.")
             with open(optionspath, "r", encoding="utf-8") as optionsfilereads:
                 olines = optionsfilereads.readlines()
             with open(optionspath, "w", encoding="utf-8") as optionsfilewrite:
@@ -523,6 +530,12 @@ def mainui():
                         if textcolorchanged == True:
                             optionsfilewrite.write(f'textcolor = "{textcolor_TEMP}"\n')
                             print("wrote it (textcolor)")
+                        else:
+                            optionsfilewrite.write(line)
+                    elif line.startswith("sectionfgcolor"):
+                        if sectioncolorchanged == True:
+                            optionsfilewrite.write(f'sectionfgcolor = "{sectioncolor_TEMP}"\n')
+                            print("wrote it (sectioncolor)")
                         else:
                             optionsfilewrite.write(line)
                     else:
