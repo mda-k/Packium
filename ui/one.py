@@ -313,6 +313,10 @@ def mainui():
         textcolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
         textcolorfield = ctk.CTkButton(generalfieldframe, text=textcolor, text_color=textcolor, font=("Arial", 16), fg_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:picktextcolor())
         textcolorfield.pack(anchor="w", padx=10, pady=(0, 10))
+        sectioncolorfieldlabel= ctk.CTkLabel(generalfieldframe, text="The color of sections:", font=("Arial", 16), text_color=textcolor)
+        sectioncolorfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
+        sectioncolorfield = ctk.CTkButton(generalfieldframe, text=sectionfgcolor, text_color=textcolor, font=("Arial", 16), fg_color=sectionfgcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:picksectioncolor())
+        sectioncolorfield.pack(anchor="w", padx=10, pady=(0, 10))
         generalfieldframe.bind("<Button-1>", startmove)
         generalfieldframe.bind("<B1-Motion>", move)
         generalfieldframelabel.bind("<Button-1>", startmove)
@@ -323,6 +327,8 @@ def mainui():
         appcolorsetfieldlabel.bind("<B1-Motion>", move)
         appcolorsetfield.bind("<Button-1>", startmove)
         appcolorsetfield.bind("<B1-Motion>", move)
+        sectioncolorfieldlabel.bind("<Button-1>", startmove)
+        sectioncolorfieldlabel.bind("<B1-Motion>", move)
 
 
 
@@ -377,6 +383,7 @@ def mainui():
         buttoncolor_TEMP = None
         bttoncolor_hover_TEMP = None
         textcolor_TEMP = None
+        sectioncolor_TEMP = None
         def resetsettings():
             confirmreset = messagebox.askyesno("Are you sure?", "Are you sure you want to reset your Packium appearance settings?")
             if confirmreset:
@@ -418,6 +425,15 @@ def mainui():
                 print(f"selected color is {textcolor_TEMP}")
                 textcolorfield.configure(text=textcolor_TEMP)
                 textcolorfield.configure(fg_color = textcolor_TEMP)
+        def picksectioncolor():
+            print("section color button pressed.")
+            nonlocal sectioncolor_TEMP
+            sectioncolor_pick = AskColor()
+            sectioncolor_TEMP = sectioncolor_pick.get()
+            if sectioncolor_TEMP is not None:
+                print(f"selected section color is {sectioncolor_TEMP}")
+                sectioncolorfield.configure(text=sectioncolor_TEMP)
+                sectioncolorfield.configure(fg_color=sectioncolor_TEMP)
         def applysettings():
             buttoncolorchanged = None
             buttonhovercolorchanged = None
