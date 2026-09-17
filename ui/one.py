@@ -299,9 +299,9 @@ def mainui():
         appcolorsetoptions = ["Blue", "Green"]
         appcolorsetfield = ctk.CTkOptionMenu(generalfieldframe, values=appcolorsetoptions, dynamic_resizing=False, text_color=textcolor, fg_color=buttoncolor, corner_radius=20)
         appcolorsetfield.pack(anchor="w", padx=10, pady=(0, 10))
-        if defaultcolortheme is "dark-blue":
+        if defaultcolortheme == "dark-blue":
             appcolorsetfield.set("Blue")
-        if defaultcolortheme is "green":
+        if defaultcolortheme == "green":
             appcolorsetfield.set("Green")
         iconpackfieldlabel = ctk.CTkLabel(generalfieldframe, text="The icon pack that Packium uses:", font=("Arial", 16), text_color=textcolor)
         iconpackfieldlabel.pack(anchor="w", padx=10, pady=(0, 0))
@@ -587,7 +587,23 @@ def mainui():
         downloadlabel.pack()
         downloadlabel.bind("<Button-1>", startmove)
         downloadlabel.bind("<B1-Motion>", move)
-                
+
+        searchfield = ctk.CTkEntry(overlayframedb, placeholder_text="Search for programs via Winget", width=290, height=30, corner_radius=20, border_width=1)
+        searchfield.pack()
+
+        def search(event=None):
+            def afterrunsearchthread():            
+                print(f"the search is done.")
+            def runsearchthread():
+                print("running search thread.")
+                cmd0 = ["winget", "search", searchfield.get()]
+                output = subprocess.run(cmd0, capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
+                lines = output.stdout.splitlines()
+                print(lines)
+                time.sleep(1)
+                app.after(0, lambda: afterrunsearchthread())
+            threading.Thread(target=runsearchthread, daemon=True).start()
+        searchfield.bind("<Return>", search)
                 
     def startmove(event):
         app.x = event.x
