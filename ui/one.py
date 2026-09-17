@@ -545,7 +545,48 @@ def mainui():
             print("settings applied.")
             exitsb()
 
-                
+    def downloadbuttonpressed():
+        print("download button pressed.")
+        disabledstatebuttons()
+        download_popup = ctk.CTkToplevel(app)
+        download_popup.overrideredirect(True)
+        download_popup.title("Settings")
+        download_popup.geometry("400x500")
+        download_popup.attributes("-topmost", True)
+        transparent_color = "#000001"
+        download_popup.attributes("-alpha", wopacity)
+        download_popup.attributes("-transparentcolor", transparent_color)
+        download_popup.configure(fg_color=transparent_color)
+        download_popup.grab_set()
+        download_popup.focus_set()
+        appicon = resourcesdir / "icon.ico"
+        try:
+            download_popup.after(200, lambda: download_popup.iconbitmap(appicon))
+        except Exception:
+            messagebox.showerror("Error", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
+            appicon = replacementiconapp
+        def startmove(event):
+            download_popup.x = event.x
+            download_popup.y = event.y
+        def move(event):
+            deltax = event.x - download_popup.x
+            deltay = event.y - download_popup.y
+            x = download_popup.winfo_x() + deltax
+            y = download_popup.winfo_y() + deltay
+            download_popup.geometry(f"+{x}+{y}")
+        def exitdb():
+            normalstatebuttons()
+            download_popup.destroy()
+        overlayframedb = ctk.CTkFrame(download_popup, corner_radius=25)
+        overlayframedb.pack(fill="both", expand=True)
+        overlayframedb.bind("<Button-1>", startmove)
+        overlayframedb.bind("<B1-Motion>", move)
+        closedb = ctk.CTkButton(overlayframedb, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitdb())
+        closedb.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
+        downloadlabel = ctk.CTkLabel(overlayframedb, text="Download and install programs", font=("Arial", 16, "bold"), text_color=textcolor)
+        downloadlabel.pack()
+        downloadlabel.bind("<Button-1>", startmove)
+        downloadlabel.bind("<B1-Motion>", move)
                 
                 
     def startmove(event):
@@ -599,7 +640,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the download icon (aka /resources/download.png or /resources/downloaddark.png).")
         downloadiconimg = replacementicon512
     downloadicon = ctk.CTkImage(light_image=downloadiconimg, dark_image=downloadiconimg, size=(sizeidxb, sizeidxb))
-    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
+    downloadbutton = ctk.CTkButton(optionsframe, text="", image=downloadicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:downloadbuttonpressed())
     downloadbutton.grid(row=0, column=1, padx=10, pady=10)
         
         
