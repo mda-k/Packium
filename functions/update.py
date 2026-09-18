@@ -1,6 +1,6 @@
 import subprocess
 def winget_update():
-    output = subprocess.run(["winget", "upgrade"], capture_output=True, text=True, creationflags=subprocess.CREATE_NEW_CONSOLE) #run winget upgrade in the background
+    output = subprocess.run(["winget", "upgrade"], capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW) #run winget upgrade in the background
     lines = output.stdout.splitlines() #turn it into separate lines by rows
     print(f"turned output into separate lines: {lines}")
     ids = []
