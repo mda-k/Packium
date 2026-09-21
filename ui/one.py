@@ -208,7 +208,7 @@ def mainui():
                        
                     if selectedids:
                         messagebox.showinfo("Notice", "You have pressed the continue button. Packium may or may not freeze for as long as the updates last, since the script is waiting for the subprocess to be done. Please do not kill or interfere with Packium.")
-                        messagebox.showinfo("Notice", "A command prompt window will open, so you can see where the update process is standing.")
+                        messagebox.showinfo("Notice", "A command prompt window will open, so you can see where the update process is standing. If it truly is not doing anything anymore, but is still frozen, you can press a Ctrl+C on the terminal. If that is the case, I'd recommend reinstalling Winget or finding another solution for it. It did happen to me, this is why I'm informing you about this, but I didn't get to fix it, and I'm not sure how to.")
                         continuebuttonup.configure(state="disabled", text="Working...")
                         def afterrunupdatethread():
                             
