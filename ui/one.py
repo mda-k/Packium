@@ -34,6 +34,7 @@ if str(functionsdir) not in sys.path:
 from update import *
 from about import *
 from discordinvite import *
+from searchpackages import *
 
 def mainui():
     #appearance variables
@@ -587,24 +588,25 @@ def mainui():
         downloadlabel.pack()
         downloadlabel.bind("<Button-1>", startmove)
         downloadlabel.bind("<B1-Motion>", move)
-
+        searchlabel = ctk.CTkLabel(overlayframedb, text="Search thread is running...", font=("Arial", 14, "bold"), text_color=textcolor)
         searchfield = ctk.CTkEntry(overlayframedb, placeholder_text="Search for programs via Winget", width=290, height=30, corner_radius=20, border_width=1)
         searchfield.pack()
 
         def search(event=None):
+            searchinput = searchfield.get()
             def afterrunsearchthread():            
                 print(f"the search is done.")
+                searchlabel.destroy()
             def runsearchthread():
                 print("running search thread.")
-                cmd0 = ["winget", "search", searchfield.get()]
-                output = subprocess.run(cmd0, capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
-                lines = output.stdout.splitlines()
-                print(lines)
+                searchlabel.pack(anchor="center")
+                searchdata = searchpackage(searchinput)
+                print("got {searchdata}")
                 time.sleep(1)
                 app.after(0, lambda: afterrunsearchthread())
             threading.Thread(target=runsearchthread, daemon=True).start()
         searchfield.bind("<Return>", search)
-                
+        
     def startmove(event):
         app.x = event.x
         app.y = event.y
