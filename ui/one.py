@@ -591,12 +591,29 @@ def mainui():
         searchlabel = ctk.CTkLabel(overlayframedb, text="Search thread is running...", font=("Arial", 14, "bold"), text_color=textcolor)
         searchfield = ctk.CTkEntry(overlayframedb, placeholder_text="Search for programs via Winget", width=290, height=30, corner_radius=20, border_width=1)
         searchfield.pack()
-
+        itemlist = ctk.CTkScrollableFrame(overlayframedb, fg_color=sectionfgcolor, corner_radius=25)
+        itemlist.pack(padx=8, pady=0, fill="both", expand=True)
         def search(event=None):
             searchinput = searchfield.get()
             def afterrunsearchthread():            
                 print(f"the search is done.")
                 searchlabel.destroy()
+                namessearch = list(searchdata.keys())
+                idssearch = list(searchdata.values())
+                checkboxes = {}
+                for name in names:
+                    item = ctk.CTkCheckBox(itemlist, text=name, font=("Arial", 12, "bold"), text_color=textcolor, checkbox_width=20, checkbox_height=20, corner_radius=6)
+                    item.pack(padx=10, pady=5, fill="x", anchor="w")
+                    checkboxes[name] = item
+                def getchecked():
+                    selectedids = []
+                    selected = [name for name, item in checkboxes.items() if item.get() ==1]
+                    if not selected:
+                        messagebox.showerror("Error!", "You don't have any items chosen. Either close the window, or choose an item or more to continue.")
+                    for selecteditem in selected:
+                        print(f"Selected update: {selecteditem}")
+                        selectedids.append(name_id_dict[(selecteditem)])
+                        print(f"added id to the list. the list: {selectedids}")
             def runsearchthread():
                 print("running search thread.")
                 searchlabel.pack(anchor="center")
