@@ -595,13 +595,13 @@ def mainui():
         itemlist.pack(padx=8, pady=0, fill="both", expand=True)
         def search(event=None):
             searchinput = searchfield.get()
-            def afterrunsearchthread():            
+            def afterrunsearchthread(searchdata):            
                 print(f"the search is done.")
                 searchlabel.destroy()
                 namessearch = list(searchdata.keys())
                 idssearch = list(searchdata.values())
                 checkboxes = {}
-                for name in names:
+                for name in namessearch:
                     item = ctk.CTkCheckBox(itemlist, text=name, font=("Arial", 12, "bold"), text_color=textcolor, checkbox_width=20, checkbox_height=20, corner_radius=6)
                     item.pack(padx=10, pady=5, fill="x", anchor="w")
                     checkboxes[name] = item
@@ -618,9 +618,9 @@ def mainui():
                 print("running search thread.")
                 searchlabel.pack(anchor="center")
                 searchdata = searchpackage(searchinput)
-                print("got {searchdata}")
+                print(f"got {searchdata}")
                 time.sleep(1)
-                app.after(0, lambda: afterrunsearchthread())
+                app.after(0, lambda: afterrunsearchthread(searchdata))
             threading.Thread(target=runsearchthread, daemon=True).start()
         searchfield.bind("<Return>", search)
         
