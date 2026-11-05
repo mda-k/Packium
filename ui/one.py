@@ -35,6 +35,7 @@ from update import *
 from about import *
 from discordinvite import *
 from searchpackages import *
+from listprograms import *
 
 def mainui():
     #appearance variables
@@ -551,7 +552,7 @@ def mainui():
         disabledstatebuttons()
         download_popup = ctk.CTkToplevel(app)
         download_popup.overrideredirect(True)
-        download_popup.title("Settings")
+        download_popup.title("Download and install programs")
         download_popup.geometry("400x500")
         download_popup.attributes("-topmost", True)
         transparent_color = "#000001"
@@ -597,7 +598,7 @@ def mainui():
             searchinput = searchfield.get()
             def afterrunsearchthread(searchdata):            
                 print(f"the search is done.")
-                searchlabel.destroy()
+                searchlabel.configure(text="")
                 namessearch = list(searchdata.keys())
                 idssearch = list(searchdata.values())
                 checkboxes = {}
@@ -639,6 +640,135 @@ def mainui():
                 app.after(0, lambda: afterrunsearchthread(searchdata))
             threading.Thread(target=runsearchthread, daemon=True).start()
         searchfield.bind("<Return>", search)
+    def removebuttonpressed():
+        print("uninstall button pressed.")
+        disabledstatebuttons()
+        uninstall_popup = ctk.CTkToplevel(app)
+        uninstall_popup.overrideredirect(True)
+        uninstall_popup.title("Remove installed programs")
+        uninstall_popup.geometry("400x500")
+        uninstall_popup.attributes("-topmost", True)
+        transparent_color = "#000001"
+        uninstall_popup.attributes("-alpha", wopacity)
+        uninstall_popup.attributes("-transparentcolor", transparent_color)
+        uninstall_popup.configure(fg_color=transparent_color)
+        uninstall_popup.grab_set()
+        uninstall_popup.focus_set()
+        appicon = resourcesdir / "icon.ico"
+        try:
+            uninstall_popup.after(200, lambda: uninstall_popup.iconbitmap(appicon))
+        except Exception:
+            messagebox.showerror("Error", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
+            appicon = replacementiconapp
+        def startmove(event):
+            uninstall_popup.x = event.x
+            uninstall_popup.y = event.y
+        def move(event):
+            deltax = event.x - uninstall_popup.x
+            deltay = event.y - uninstall_popup.y
+            x = uninstall_popup.winfo_x() + deltax
+            y = uninstall_popup.winfo_y() + deltay
+            uninstall_popup.geometry(f"+{x}+{y}")
+        def exitdb():
+            normalstatebuttons()
+            uninstall_popup.destroy()
+        overlayframeub = ctk.CTkFrame(uninstall_popup, corner_radius=25)
+        overlayframeub.pack(fill="both", expand=True)
+        overlayframeub.bind("<Button-1>", startmove)
+        overlayframeub.bind("<B1-Motion>", move)
+        closeub = ctk.CTkButton(overlayframeub, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitdb())
+        closeub.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
+        uninstalllabel = ctk.CTkLabel(overlayframeub, text="Remove installed programs", font=("Arial", 16, "bold"), text_color=textcolor)
+        uninstalllabel.pack()
+        uninstalllabel.bind("<Button-1>", startmove)
+        uninstalllabel.bind("<B1-Motion>", move)
+        listlabel = ctk.CTkLabel(overlayframeub, text="List thread is running...", font=("Arial", 14, "bold"), text_color=textcolor)
+        itemlist = ctk.CTkScrollableFrame(overlayframeub, fg_color=sectionfgcolor, corner_radius=25)
+        itemlist.pack(padx=8, pady=0, fill="both", expand=True)
+        def afterrunlistthread(listdata):
+            listlabel.configure(text="")
+            print(f"the listgrab is done.")
+            nameslist = list(listdata.keys())
+            idslist = list(listdata.values())
+            checkboxes = {}
+            for name in nameslist:
+                item = ctk.CTkCheckBox(itemlist, text=name, font=("Arial", 12, "bold"), text_color=textcolor, checkbox_width=20, checkbox_height=20, corner_radius=6)
+                item.pack(padx=10, pady=5, fill="x", anchor="w")
+                checkboxes[name] = item
+            uninstallcbutton = ctk.CTkButton(overlayframeub, text="Uninstall", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
+            uninstallcbutton.place(relx=1.0, rely=1.0, x=-20, y=-2, anchor="se")
+            def getchecked():
+                selectedids = []
+                selected = [name for name, item in checkboxes.items() if item.get() ==1]
+                if not selected:
+                    messagebox.showerror("Error!", "You don't have any items chosen. Either close the window, or choose an item or more to continue.")
+                for selecteditem in selected:
+                    print(f"Selected: {selecteditem}")
+                    selectedids.append(listdata[(selecteditem)])
+                    print(f"added id to the list. the list: {selectedids}")
+                if selected:
+                    uninstallcbutton.configure(state="disabled")
+                    def afterrununinstallthread():
+                        print(f"the uninstallation is done.")
+                        messagebox.showinfo("Task done!", "All the selected programs have been uninstalled!")
+                        normalstatebuttons()
+                        uninstallcbutton.configure(state="normal")
+                        uninstall_popup.destroy()
+                    def rununinstallhread():
+                        cmd = ["winget", "uninstall", *selectedids]
+                        subprocess.run(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                        time.sleep(1)
+                        app.after(0, lambda: afterrununinstallthread())
+                    threading.Thread(target=rununinstallhread, daemon=True).start()
+        def runlistthread():
+            print("running list thread")
+            listlabel.pack(anchor="center")
+            listdata = winget_list()
+            print(f"got {listdata}")
+            time.sleep(1)
+            app.after(0, lambda: afterrunlistthread(listdata))
+        threading.Thread(target=runlistthread, daemon=True).start()
+    def aboutbuttonpressed():
+        disabledstatebuttons()
+        about_popup = ctk.CTkToplevel(app)
+        about_popup.overrideredirect(True)
+        about_popup.title("About Packium")
+        about_popup.geometry("200x100")
+        about_popup.attributes("-topmost", True)
+        transparent_color = "#000001"
+        about_popup.attributes("-alpha", wopacity)
+        about_popup.attributes("-transparentcolor", transparent_color)
+        about_popup.configure(fg_color=transparent_color)
+        about_popup.grab_set()
+        about_popup.focus_set()
+        appicon = resourcesdir / "icon.ico"
+        try:
+            about_popup.after(200, lambda: about_popup.iconbitmap(appicon))
+        except Exception:
+            messagebox.showerror("Error", "Packium was not able to open and/or was not able to find /resources/icon.ico.")
+            appicon = replacementiconapp
+        def startmove(event):
+            about_popup.x = event.x
+            about_popup.y = event.y
+        def move(event):
+            deltax = event.x - about_popup.x
+            deltay = event.y - about_popup.y
+            x = about_popup.winfo_x() + deltax
+            y = about_popup.winfo_y() + deltay
+            about_popup.geometry(f"+{x}+{y}")
+        def exitdb():
+            normalstatebuttons()
+            about_popup.destroy()
+        overlayframeab = ctk.CTkFrame(about_popup, corner_radius=25)
+        overlayframeab.pack(fill="both", expand=True)
+        overlayframeab.bind("<Button-1>", startmove)
+        overlayframeab.bind("<B1-Motion>", move)
+        closeab = ctk.CTkButton(overlayframeab, text="", fg_color="white", hover_color="gray", width=8, height=8, corner_radius=4, command=lambda:exitdb())
+        closeab.place(relx=1.0, rely=0.0, x=-12, y=12, anchor="ne")
+        aboutlabel = ctk.CTkLabel(overlayframeab, text="About Packium", font=("Arial", 16, "bold"), text_color=textcolor)
+        aboutlabel.pack()
+        aboutlabel.bind("<Button-1>", startmove)
+        aboutlabel.bind("<B1-Motion>", move)
         
     def startmove(event):
         app.x = event.x
@@ -709,7 +839,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the uninstall icon (aka /resources/uninstall.png or /resources/uninstalldark.png).")
         uninstalliconimg = replacementicon512
     uninstallicon =  ctk.CTkImage(light_image=uninstalliconimg, dark_image=uninstalliconimg, size=(sizeidxb, sizeidxb))
-    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
+    uninstallbutton = ctk.CTkButton(optionsframe, text="", image=uninstallicon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:removebuttonpressed())
     uninstallbutton.grid(row=0, column=2, padx=10, pady=10)
     
     
@@ -767,7 +897,7 @@ def mainui():
         messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the about icon (aka /resources/about.png or /resources/aboutdark.png).")
         abouticonimg = replacementicon512
     abouticon = ctk.CTkImage(light_image=abouticonimg, dark_image=abouticonimg, size=(sizeidxb, sizeidxb))
-    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover)
+    aboutbutton = ctk.CTkButton(optionsframe, text="", image=abouticon, width=60, height=60, fg_color=buttoncolor, hover_color=bttoncolor_hover, command=lambda:aboutbuttonpressed())
     aboutbutton.grid(row=1, column=2, padx=10, pady=10)
     if packiumiconpackvalueisfucked == True:
         messagebox.showerror("Error!", 'Packium could not read the iconpack value in /ui/options.packium. You can manually edit the options file to iconpack = "Dark" or iconpack = "Light" to fix this, or just reset your appearance settings.')
