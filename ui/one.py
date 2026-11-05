@@ -733,7 +733,7 @@ def mainui():
         about_popup = ctk.CTkToplevel(app)
         about_popup.overrideredirect(True)
         about_popup.title("About Packium")
-        about_popup.geometry("200x100")
+        about_popup.geometry("300x220")
         about_popup.attributes("-topmost", True)
         transparent_color = "#000001"
         about_popup.attributes("-alpha", wopacity)
@@ -769,7 +769,21 @@ def mainui():
         aboutlabel.pack()
         aboutlabel.bind("<Button-1>", startmove)
         aboutlabel.bind("<B1-Motion>", move)
-        
+        logopath = resourcesdir / "logofull.png"
+        try:
+            logo = Image.open(logopath)
+        except FileNotFoundError:
+            messagebox.showerror("Error!", "Packium was not able to open and/or was not able to find the full logo picture (aka /resources/logofull.png)")
+            logo = replacementicon512
+        logopack = ctk.CTkImage(light_image=logo, dark_image=logo, size=(250, 100))
+        logolabel = ctk.CTkLabel(overlayframeab, image=logopack, text="")
+        logolabel.pack()
+        aboutl = ctk.CTkLabel(overlayframeab, text="Packium pre-release 0.64", font=("Arial", 16, "bold"), text_color=textcolor)
+        aboutl.pack(pady=(2, 0))
+        text0 = """by md/mda-k/mdak
+Discord: @md_ant3d"""
+        aboutl0 = ctk.CTkLabel(overlayframeab, text=text0, font=("Arial", 14), text_color=textcolor)
+        aboutl0.pack(pady=(0, 0))
     def startmove(event):
         app.x = event.x
         app.y = event.y
