@@ -605,15 +605,31 @@ def mainui():
                     item = ctk.CTkCheckBox(itemlist, text=name, font=("Arial", 12, "bold"), text_color=textcolor, checkbox_width=20, checkbox_height=20, corner_radius=6)
                     item.pack(padx=10, pady=5, fill="x", anchor="w")
                     checkboxes[name] = item
+                downloadtbutton = ctk.CTkButton(overlayframedb, text="Download", font=("Arial", 16, "bold"), fg_color=buttoncolor, text_color=textcolor, hover_color=bttoncolor_hover, width=40, height=20, corner_radius=20, command=lambda:getchecked())
+                downloadtbutton.place(relx=1.0, rely=1.0, x=-20, y=-2, anchor="se")
                 def getchecked():
                     selectedids = []
                     selected = [name for name, item in checkboxes.items() if item.get() ==1]
                     if not selected:
                         messagebox.showerror("Error!", "You don't have any items chosen. Either close the window, or choose an item or more to continue.")
                     for selecteditem in selected:
-                        print(f"Selected update: {selecteditem}")
-                        selectedids.append(name_id_dict[(selecteditem)])
+                        print(f"Selected: {selecteditem}")
+                        selectedids.append(searchdata[(selecteditem)])
                         print(f"added id to the list. the list: {selectedids}")
+                    if selected:
+                        downloadtbutton.configure(state="disabled")
+                        def afterrundownloadthread():
+                            print(f"the installation is done.")
+                            messagebox.showinfo("Task done!", "All the selected programs have been downloaded and installed!")
+                            normalstatebuttons()
+                            downloadtbutton.configure(state="normal")
+                            download_popup.destroy()
+                        def rundownloadthread():
+                            cmd = ["winget", "install", *selectedids]
+                            subprocess.run(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                            time.sleep(1)
+                            app.after(0, lambda: afterrundownloadthread())
+                        threading.Thread(target=rundownloadthread, daemon=True).start()
             def runsearchthread():
                 print("running search thread.")
                 searchlabel.pack(anchor="center")
