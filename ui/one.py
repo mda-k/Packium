@@ -778,7 +778,7 @@ def mainui():
         logopack = ctk.CTkImage(light_image=logo, dark_image=logo, size=(250, 100))
         logolabel = ctk.CTkLabel(overlayframeab, image=logopack, text="")
         logolabel.pack()
-        aboutl = ctk.CTkLabel(overlayframeab, text="Packium pre-release 0.64", font=("Arial", 16, "bold"), text_color=textcolor)
+        aboutl = ctk.CTkLabel(overlayframeab, text="Packium pre-release 0.66_final", font=("Arial", 16, "bold"), text_color=textcolor)
         aboutl.pack(pady=(2, 0))
         text0 = """by md/mda-k/mdak
 Discord: @md_ant3d"""
