@@ -2,7 +2,7 @@ import subprocess
 def searchpackage(searchinput):
     print("search package func")
     print(searchinput)
-    cmd0 = ["winget", "search", searchinput]
+    cmd0 = ["winget", "search", searchinput, "--accept-source-agreements"]
     output = subprocess.run(cmd0, capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
     lines = output.stdout.splitlines()
     print(lines)

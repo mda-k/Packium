@@ -1,6 +1,6 @@
 import subprocess
 def winget_list():
-    output = subprocess.run(["winget", "list"], capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW) #run winget upgrade in the background
+    output = subprocess.run(["winget", "list", "--accept-source-agreements"], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8", errors="replace", creationflags=subprocess.CREATE_NEW_CONSOLE) #run winget upgrade in the background
     lines = output.stdout.splitlines() #turn it into separate lines by rows
     print(f"turned output into separate lines: {lines}")
     ids = []
