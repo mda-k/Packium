@@ -10,6 +10,7 @@ import threading
 from CTkColorPicker import AskColor
 import shutil
 import os
+import ast
 
 
 #directories
@@ -38,14 +39,17 @@ if str(pathappdatashit) not in sys.path:
     
 #functions
 from update import *
-from about import *
 from discordinvite import *
 from searchpackages import *
 from listprograms import *
 
+
+allowedshitbyast = {"buttoncolor", "bttoncolor_hover", "iconpack", "textcolor", "replacementicon_color", "replacementicon512", "replacementiconapp", "sizeidxb", "sizeidxbh", "maingeometry", "appearancemode", "defaultcolortheme", "wopacity", "sectionfgcolor"}
+
+
 def mainui():
     #appearance variables
-    context = {**globals(), **locals()}
+    variables_OK = {}
     sizeidxb = 5
     sizeidxbh = 5
     optionspath = currentdir / "options.packium"
@@ -56,25 +60,34 @@ def mainui():
             shutil.copyfile(defaultoptionspath, optionspath)
     with open(optionspath, "r", encoding="utf-8") as optionsfile:
         for line in optionsfile:
-            line.strip()
+            line = line.strip()
+            shit, _, value = line.partition("=")
+            shit = shit.strip()
             print(line)
+            print(shit)
             if "=" in line:
                 print(f"found =: {line}")
-                exec(line, context)
-    buttoncolor = context.get("buttoncolor")
-    bttoncolor_hover = context.get("bttoncolor_hover")
-    iconpack = context.get("iconpack")
-    textcolor = context.get("textcolor")
-    replacementicon_color = context.get("replacementicon_color")
-    replacementicon512 = context.get("replacementicon512")
-    replacementiconapp = context.get("replacementiconapp")
-    sizeidxb = context.get("sizeidxb", sizeidxb)
-    sizeidxbh = context.get("sizeidxbh", sizeidxbh)
-    maingeometry = context.get("maingeometry")
-    appearancemode = context.get("appearancemode")
-    defaultcolortheme = context.get("defaultcolortheme")
-    wopacity = context.get("wopacity")
-    sectionfgcolor = context.get("sectionfgcolor")
+                if shit not in allowedshitbyast:
+                    print(f"{line} not in list")
+                    continue
+                try:
+                    variables_OK[shit] = ast.literal_eval(value.strip())
+                except (ValueError, SyntaxError):
+                    print(f"what the fuck is {shit} = {value}?")
+    buttoncolor = variables_OK.get("buttoncolor")
+    bttoncolor_hover = variables_OK.get("bttoncolor_hover")
+    iconpack = variables_OK.get("iconpack")
+    textcolor = variables_OK.get("textcolor")
+    replacementicon_color = variables_OK.get("replacementicon_color")
+    replacementicon512 = Image.new("RGB", (512, 512), color=replacementicon_color)
+    replacementiconapp = Image.new("RGB", (32, 32), color=replacementicon_color)
+    sizeidxb = variables_OK.get("sizeidxb", sizeidxb)
+    sizeidxbh = variables_OK.get("sizeidxbh", sizeidxbh)
+    maingeometry = variables_OK.get("maingeometry")
+    appearancemode = variables_OK.get("appearancemode")
+    defaultcolortheme = variables_OK.get("defaultcolortheme")
+    wopacity = variables_OK.get("wopacity")
+    sectionfgcolor = variables_OK.get("sectionfgcolor")
     
     print(f"button color: {buttoncolor}") #color of the buttons
     print(f"hover button color: {bttoncolor_hover}") #color of the button when hovered over
@@ -145,7 +158,7 @@ def mainui():
     def updatebutton_pressed():
         print("update button pressed.")
         disabledstatebuttons()
-        messagebox.showinfo("Notice", "Winget may or may not reinstall the program to it's original path. I haven't been able to figure out how it's possible to force Winget to keep the updated program at it's original path, especially if some vendors just do not accept Winget's --location parameter. Before using the program's update feature, you should know, that some programs might be moved to the C: drive, the vendor's hardcoded/default installation path.")
+        #messagebox.showinfo("Notice", "Winget may or may not reinstall the program to it's original path. I haven't been able to figure out how it's possible to force Winget to keep the updated program at it's original path, especially if some vendors just do not accept Winget's --location parameter. Before using the program's update feature, you should know, that some programs might be moved to the C: drive, the vendor's hardcoded/default installation path.")
         def fetchupdates():
             name_id_dict = winget_update()
             app.after(0, lambda: onfetchedupdates(name_id_dict))
@@ -219,8 +232,8 @@ def mainui():
                         print(f"added id to the list. the list: {selectedids}")
                        
                     if selectedids:
-                        messagebox.showinfo("Notice", "You have pressed the continue button. Packium may or may not freeze for as long as the updates last, since the script is waiting for the subprocess to be done. Please do not kill or interfere with Packium.")
-                        messagebox.showinfo("Notice", "A command prompt window will open, so you can see where the update process is standing. If it truly is not doing anything anymore, but is still frozen, you can press a Ctrl+C on the terminal. If that is the case, I'd recommend reinstalling Winget or finding another solution for it. It did happen to me, this is why I'm informing you about this, but I didn't get to fix it, and I'm not sure how to.")
+                        #messagebox.showinfo("Notice", "You have pressed the continue button. Packium may or may not freeze for as long as the updates last, since the script is waiting for the subprocess to be done. Please do not kill or interfere with Packium.")
+                        #messagebox.showinfo("Notice", "A command prompt window will open, so you can see where the update process is standing. If it truly is not doing anything anymore, but is still frozen, you can press a Ctrl+C on the terminal. If that is the case, I'd recommend reinstalling Winget or finding another solution for it. It did happen to me, this is why I'm informing you about this, but I didn't get to fix it, and I'm not sure how to.")
                         continuebuttonup.configure(state="disabled", text="Working...")
                         def afterrunupdatethread():
                             
@@ -790,7 +803,7 @@ def mainui():
         logopack = ctk.CTkImage(light_image=logo, dark_image=logo, size=(250, 100))
         logolabel = ctk.CTkLabel(overlayframeab, image=logopack, text="")
         logolabel.pack()
-        aboutl = ctk.CTkLabel(overlayframeab, text="Packium release 0.1-2", font=("Arial", 16, "bold"), text_color=textcolor)
+        aboutl = ctk.CTkLabel(overlayframeab, text="Packium release 0.1-2_patch2", font=("Arial", 16, "bold"), text_color=textcolor)
         aboutl.pack(pady=(2, 0))
         text0 = """by md/mda-k/mdak
 Discord: @md_ant3d"""
