@@ -9,6 +9,7 @@ import time
 import threading
 from CTkColorPicker import AskColor
 import shutil
+import os
 
 
 #directories
@@ -20,6 +21,9 @@ resourcesdir = rootdir  / "resources"
 print(resourcesdir)
 functionsdir = rootdir / "functions"
 print(functionsdir)
+pathappdatashit = Path(os.environ.get("APPDATA", Path.home())) / "Packium"
+pathappdatashit.mkdir(parents=True, exist_ok=True)
+print(pathappdatashit)
 if str(rootdir) not in sys.path:
     sys.path.insert(0, str(rootdir))
 if str(currentdir) not in sys.path:
@@ -28,6 +32,8 @@ if str(resourcesdir) not in sys.path:
     sys.path.insert(0, str(resourcesdir))
 if str(functionsdir) not in sys.path:
     sys.path.insert(0, str(functionsdir))
+if str(pathappdatashit) not in sys.path:
+    sys.path.insert(0, str(pathappdatashit))
     
     
 #functions
@@ -44,6 +50,10 @@ def mainui():
     sizeidxbh = 5
     optionspath = currentdir / "options.packium"
     defaultoptionspath = currentdir / "default.packium"
+    if not optionspath.exists():
+        optionspath = pathappdatashit / "options.packium"
+        if not optionspath.exists():
+            shutil.copyfile(defaultoptionspath, optionspath)
     with open(optionspath, "r", encoding="utf-8") as optionsfile:
         for line in optionsfile:
             line.strip()
@@ -493,6 +503,8 @@ def mainui():
                 print("user has not changed the color of text.")
             if sectioncolor_TEMP is not None:
                 print("user has changed section color.")
+            if sectioncolor_TEMP is None:
+                sectioncolorchanged = False 
             with open(optionspath, "r", encoding="utf-8") as optionsfilereads:
                 olines = optionsfilereads.readlines()
             with open(optionspath, "w", encoding="utf-8") as optionsfilewrite:
@@ -542,7 +554,7 @@ def mainui():
                             optionsfilewrite.write(line)
                     else:
                         optionsfilewrite.write(line)
-            if buttoncolorchanged == True or buttonhovercolorchanged == True or themechanged == True or iconpackchanged == True or textcolorchanged == True:
+            if buttoncolorchanged == True or buttonhovercolorchanged == True or themechanged == True or iconpackchanged == True or textcolorchanged == True or sectioncolorchanged == True:
                 messagebox.showinfo("Notice", "To see the changes, you have to restart the program.")
             print("settings applied.")
             exitsb()
@@ -778,7 +790,7 @@ def mainui():
         logopack = ctk.CTkImage(light_image=logo, dark_image=logo, size=(250, 100))
         logolabel = ctk.CTkLabel(overlayframeab, image=logopack, text="")
         logolabel.pack()
-        aboutl = ctk.CTkLabel(overlayframeab, text="Packium release 0.1-1", font=("Arial", 16, "bold"), text_color=textcolor)
+        aboutl = ctk.CTkLabel(overlayframeab, text="Packium release 0.1-2", font=("Arial", 16, "bold"), text_color=textcolor)
         aboutl.pack(pady=(2, 0))
         text0 = """by md/mda-k/mdak
 Discord: @md_ant3d"""
